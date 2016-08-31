@@ -1,0 +1,17 @@
+{
+  "name": "set",
+  "version": "0.0.1",
+  "description": "P2P set game for 2 players",
+  "author": {
+    "name": "Bang Yongbae",
+    "email": "ybbarng@gmail.com"
+  },
+  "dependencies": {
+    "browserify": "^13.1.0",
+    "ecstatic": "^2.1.0",
+    "socket.io": "^1.4.8",
+    "socket.io-client": "^1.4.8",
+    "socket.io-p2p": "^2.2.0",
+    "socket.io-p2p-server": "^1.2.0"
+  }
+}
