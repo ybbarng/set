@@ -20,8 +20,4 @@ io.on('connection', function (socket) {
   socket.on('peer-obj', function (data) {
     console.log('New peer is connected : %s', data)
   })
-
-  socket.on('go-private', function (data) {
-    socket.broadcast.emit('go-private', data)
-  })
 })
