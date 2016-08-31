@@ -13,7 +13,7 @@ io.use(p2pserver);
 
 io.on('connection', function(socket) {
   socket.on('peer-msg', function(data) {
-    console.log('Message from peer: %s', data);
+    console.log('Message from peer: %s', JSON.stringify(data));
     socket.broadcast.emit('peer-msg', data);
   });
 
