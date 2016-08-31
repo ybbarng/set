@@ -12,11 +12,6 @@ server.listen(1225, function() {
 io.use(p2pserver);
 
 io.on('connection', function(socket) {
-  socket.on('peer-msg', function(data) {
-    console.log('Message from peer: %s', JSON.stringify(data));
-    socket.broadcast.emit('peer-msg', data);
-  });
-
   socket.on('join', function(peerId) {
     socket.peerId = peerId;
     console.log('A peer is connected : %s', socket.peerId);
@@ -25,4 +20,10 @@ io.on('connection', function(socket) {
   socket.on('disconnect', function() {
     console.log('A peer is disconnected : %s', socket.peerId);
   });
+
+  socket.on('message', function(data) {
+    console.log('Message from peer: %s', JSON.stringify(data));
+    socket.broadcast.emit('message', data);
+  });
+
 });

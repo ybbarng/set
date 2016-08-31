@@ -14,7 +14,7 @@ function init() {
   var box = document.getElementById('msg-box');
   var msgList = document.getElementById('msg-list');
 
-  p2psocket.on('peer-msg', function(data) {
+  p2psocket.on('message', function(data) {
     var li = document.createElement('li');
     li.appendChild(document.createTextNode(data.textVal));
     msgList.appendChild(li);
@@ -25,7 +25,7 @@ function init() {
     var li = document.createElement('li');
     li.appendChild(document.createTextNode(box.value));
     msgList.appendChild(li);
-    p2psocket.emit('peer-msg', {textVal: box.value});
+    p2psocket.emit('message', {textVal: box.value});
     box.value = '';
   });
 }
