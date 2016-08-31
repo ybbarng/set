@@ -17,9 +17,8 @@ io.on('connection', function (socket) {
     socket.broadcast.emit('peer-msg', data)
   })
 
-  socket.on('peer-file', function (data) {
-    console.log('File from peer: %s', data)
-    socket.broadcast.emit('peer-file', data)
+  socket.on('peer-obj', function (data) {
+    console.log('New peer is connected : %s', data)
   })
 
   socket.on('go-private', function (data) {
