@@ -3,6 +3,7 @@ var io = require('socket.io-client');
 var myId = null;
 var peerId = null;
 var myPoint = 0;
+var peerPointView = 0;
 
 function init() {
   var socket = io();
@@ -40,8 +41,8 @@ function init() {
     console.log(peerId);
     board.style.display = 'block';
     myPoint = 0;
-    myPointView.innerHTML = 0;
-    peerPointView.innerHTML = 0;
+    peerPoint = 0;
+    updatePointView();
     eight.disabled = false;
   });
 
@@ -57,13 +58,14 @@ function init() {
     }
   });
 
-  p2psocket.on('eight', function(peerPoint) {
-    peerPointView.innerHTML = peerPoint;
+  p2psocket.on('eight', function(newPeerPoint) {
+    peerPoint = newPeerPoint;
+    updatePointView();
   });
 
   eight.addEventListener('click', function() {
     myPoint += 1;
-    myPointView.innerHTML = myPoint;
+    updatePointView();
     p2psocket.emit('eight', myPoint);
   });
 
@@ -75,6 +77,23 @@ function init() {
     p2psocket.emit('message', {textVal: box.value});
     box.value = '';
   });
+
+  function updatePointView() {
+    myPointView.innerHTML = myPoint;
+    peerPointView.innerHTML = peerPoint;
+    var difference = myPoint - peerPoint;
+    console.log(difference);
+    var defaultSize = 30;
+    var myFontSize = defaultSize;
+    var peerFontSize = defaultSize;
+    if (difference > 0) {
+      myFontSize += difference;
+    } else if (difference < 0) {
+      peerFontSize -= difference;
+    }
+    myPointView.style.fontSize = myFontSize + 'px';
+    peerPointView.style.fontSize = peerFontSize + 'px';
+  }
 }
 
 document.addEventListener('DOMContentLoaded', init, false);

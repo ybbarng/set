@@ -17,6 +17,7 @@ input, label {
 }
 #board {
   display: none;
+  text-align:center;
 }
 #eight {
   width: 200px;
