@@ -5,7 +5,7 @@ function init () {
   var socket = io()
   var opts = {peerOpts: {trickle: false}, autoUpgrade: false}
   var p2psocket = new Socketiop2p(socket, opts, function () {
-    p2psocket.emit('peer-obj', 'Hello there. I am ' + p2psocket.peerId)
+    p2psocket.emit('join', p2psocket.peerId)
   })
 
   // Elements

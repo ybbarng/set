@@ -17,7 +17,12 @@ io.on('connection', function (socket) {
     socket.broadcast.emit('peer-msg', data)
   })
 
-  socket.on('peer-obj', function (data) {
-    console.log('New peer is connected : %s', data)
+  socket.on('join', function (peerId) {
+    socket.peerId = peerId;
+    console.log('A peer is connected : %s', socket.peerId);
+  })
+
+  socket.on('disconnect', function () {
+    console.log('A peer is disconnected : %s', socket.peerId);
   })
 })
