@@ -11,14 +11,20 @@ server.listen(1225, function() {
 
 io.use(p2pserver);
 
+var peers = new Set();
+
 io.on('connection', function(socket) {
   socket.on('join', function(peerId) {
     socket.peerId = peerId;
+    peers.add(peerId);
     console.log('A peer is connected : %s', socket.peerId);
+    console.log(peers);
+    io.sockets.emit('peers', peers.size);
   });
 
   socket.on('disconnect', function() {
     console.log('A peer is disconnected : %s', socket.peerId);
+    peers.delete(socket.peerId);
   });
 
   socket.on('message', function(data) {

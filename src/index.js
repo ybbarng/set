@@ -13,11 +13,19 @@ function init() {
   var form = document.getElementById('msg-form');
   var box = document.getElementById('msg-box');
   var msgList = document.getElementById('msg-list');
+  var board = document.getElementById('board');
 
   p2psocket.on('message', function(data) {
     var li = document.createElement('li');
     li.appendChild(document.createTextNode(data.textVal));
     msgList.appendChild(li);
+  });
+
+  p2psocket.on('peers', function(peers) {
+    if (peers === 2) {
+      board.innerHTML = '연결되었습니다.';
+    } else {
+    }
   });
 
   form.addEventListener('submit', function(e, d) {
