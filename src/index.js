@@ -2,6 +2,7 @@ var Socketiop2p = require('socket.io-p2p');
 var io = require('socket.io-client');
 var myId = null;
 var peerId = null;
+var myPoint = 0;
 
 function init() {
   var socket = io();
@@ -16,7 +17,11 @@ function init() {
   var form = document.getElementById('msg-form');
   var box = document.getElementById('msg-box');
   var msgList = document.getElementById('msg-list');
+  var message = document.getElementById('message');
   var board = document.getElementById('board');
+  var myPointView = document.getElementById('myPoint');
+  var peerPointView = document.getElementById('peerPoint');
+  var eight = document.getElementById('eight');
 
   p2psocket.on('message', function(data) {
     var li = document.createElement('li');
@@ -25,7 +30,7 @@ function init() {
   });
 
   p2psocket.on('peers', function(peers) {
-    board.innerHTML = '연결되었습니다.';
+    message.innerHTML = '연결되었습니다.';
     for (let peer of peers) {
       if (peer !== myId) {
         peerId = peer;
@@ -33,17 +38,33 @@ function init() {
       }
     }
     console.log(peerId);
+    board.style.display = 'block';
+    myPoint = 0;
+    myPointView.innerHTML = 0;
+    peerPointView.innerHTML = 0;
+    eight.disabled = false;
   });
 
   p2psocket.on('full', function() {
-    board.innerHTML = '방이 가득 찼습니다. 나중에 다시 시도해주세요.';
+    message.innerHTML = '방이 가득 찼습니다. 나중에 다시 시도해주세요.';
   });
 
   p2psocket.on('peer-disconnect', function(disconnectedPeerId) {
     if (peerId === disconnectedPeerId) {
-      board.innerHTML = '상대방이 나가서 게임을 종료합니다.';
+      message.innerHTML = '상대방이 나가서 게임을 종료합니다.';
       console.log(peerId);
+      eight.disabled = true;
     }
+  });
+
+  p2psocket.on('eight', function(peerPoint) {
+    peerPointView.innerHTML = peerPoint;
+  });
+
+  eight.addEventListener('click', function() {
+    myPoint += 1;
+    myPointView.innerHTML = myPoint;
+    p2psocket.emit('eight', myPoint);
   });
 
   form.addEventListener('submit', function(e, d) {

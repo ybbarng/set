@@ -8,7 +8,11 @@
 <body>
   <h1>Play Game</h1>
   <p>상대방보다 버튼을 빨리 눌러서 이기세요!</p>
-  <div id="board">상대방을 기다리는 중입니다.</div>
+  <span id="message">상대방을 기다리는 중입니다.</span>
+  <div id="board">
+      <span id="myPoint">0</span> vs <span id="peerPoint">0</span>
+      <button type="button" id="eight">8</button>
+  </div>
 
   <ul id="messages"></ul>
   <form action="#" id="msg-form">
