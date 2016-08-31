@@ -1,11 +1,14 @@
 var Socketiop2p = require('socket.io-p2p');
 var io = require('socket.io-client');
+var myId = null;
+var peerId = null;
 
 function init() {
   var socket = io();
   var opts = {peerOpts: {trickle: false}, autoUpgrade: false};
   var p2psocket = new Socketiop2p(socket, opts, function() {
-    p2psocket.emit('join', p2psocket.peerId);
+    myId = p2psocket.peerId;
+    p2psocket.emit('join', myId);
   });
 
   // Elements
@@ -22,9 +25,24 @@ function init() {
   });
 
   p2psocket.on('peers', function(peers) {
-    if (peers === 2) {
-      board.innerHTML = '연결되었습니다.';
-    } else {
+    board.innerHTML = '연결되었습니다.';
+    for (let peer of peers) {
+      if (peer !== myId) {
+        peerId = peer;
+        break;
+      }
+    }
+    console.log(peerId);
+  });
+
+  p2psocket.on('full', function() {
+    board.innerHTML = '방이 가득 찼습니다. 나중에 다시 시도해주세요.';
+  });
+
+  p2psocket.on('peer-disconnect', function(disconnectedPeerId) {
+    if (peerId === disconnectedPeerId) {
+      board.innerHTML = '상대방이 나가서 게임을 종료합니다.';
+      console.log(peerId);
     }
   });
 

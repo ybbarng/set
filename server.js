@@ -15,16 +15,31 @@ var peers = new Set();
 
 io.on('connection', function(socket) {
   socket.on('join', function(peerId) {
+    console.log('A peer is trying to connect : %s', peerId);
+    console.log(peers);
+    if (peers.size >= 2) {
+      console.log('No room for %s', peerId);
+      socket.emit('full', null);
+      console.log(socket.disconnect);
+      socket.disconnect();
+      socket.close();
+      return;
+    }
     socket.peerId = peerId;
     peers.add(peerId);
     console.log('A peer is connected : %s', socket.peerId);
     console.log(peers);
-    io.sockets.emit('peers', peers.size);
+    if (peers.size == 2) {
+      io.sockets.emit('peers', Array.from(peers));
+    }
   });
 
   socket.on('disconnect', function() {
     console.log('A peer is disconnected : %s', socket.peerId);
-    peers.delete(socket.peerId);
+    if (socket.peerId) {
+      peers.delete(socket.peerId);
+      socket.broadcast.emit('peer-disconnect', socket.peerId);
+    }
   });
 
   socket.on('message', function(data) {
