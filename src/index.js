@@ -1,4 +1,3 @@
-var Socketiop2p = require('socket.io-p2p');
 var io = require('socket.io-client');
 var myId = null;
 var peerId = null;
@@ -8,10 +7,6 @@ var peerPointView = 0;
 function init() {
   var socket = io();
   var opts = {peerOpts: {trickle: false}, autoUpgrade: false};
-  var p2psocket = new Socketiop2p(socket, opts, function() {
-    myId = p2psocket.peerId;
-    p2psocket.emit('join', myId);
-  });
 
   // Elements
   var privateButton = document.getElementById('private');
@@ -24,13 +19,13 @@ function init() {
   var peerPointView = document.getElementById('peerPoint');
   var eight = document.getElementById('eight');
 
-  p2psocket.on('message', function(data) {
+  socket.on('message', function(data) {
     var li = document.createElement('li');
     li.appendChild(document.createTextNode(data.textVal));
     msgList.appendChild(li);
   });
 
-  p2psocket.on('peers', function(peers) {
+  socket.on('peers', function(peers) {
     message.innerHTML = '연결되었습니다.';
     for (let peer of peers) {
       if (peer !== myId) {
@@ -46,11 +41,11 @@ function init() {
     eight.disabled = false;
   });
 
-  p2psocket.on('full', function() {
+  socket.on('full', function() {
     message.innerHTML = '방이 가득 찼습니다. 나중에 다시 시도해주세요.';
   });
 
-  p2psocket.on('peer-disconnect', function(disconnectedPeerId) {
+  socket.on('peer-disconnect', function(disconnectedPeerId) {
     if (peerId === disconnectedPeerId) {
       message.innerHTML = '상대방이 나가서 게임을 종료합니다.';
       console.log(peerId);
@@ -58,7 +53,7 @@ function init() {
     }
   });
 
-  p2psocket.on('eight', function(newPeerPoint) {
+  socket.on('eight', function(newPeerPoint) {
     peerPoint = newPeerPoint;
     updatePointView();
   });
@@ -66,7 +61,7 @@ function init() {
   eight.addEventListener('click', function() {
     myPoint += 1;
     updatePointView();
-    p2psocket.emit('eight', myPoint);
+    socket.emit('eight', myPoint);
   });
 
   form.addEventListener('submit', function(e, d) {
@@ -74,7 +69,7 @@ function init() {
     var li = document.createElement('li');
     li.appendChild(document.createTextNode(box.value));
     msgList.appendChild(li);
-    p2psocket.emit('message', {textVal: box.value});
+    socket.emit('message', {textVal: box.value});
     box.value = '';
   });
 
