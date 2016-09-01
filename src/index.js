@@ -1,6 +1,4 @@
 var io = require('socket.io-client');
-var myId = null;
-var peerId = null;
 var myPoint = 0;
 var peerPointView = 0;
 
@@ -25,15 +23,8 @@ function init() {
     msgList.appendChild(li);
   });
 
-  socket.on('peers', function(peers) {
+  socket.on('start', function() {
     message.innerHTML = '연결되었습니다.';
-    for (let peer of peers) {
-      if (peer !== myId) {
-        peerId = peer;
-        break;
-      }
-    }
-    console.log(peerId);
     board.style.display = 'block';
     myPoint = 0;
     peerPoint = 0;
@@ -45,12 +36,9 @@ function init() {
     message.innerHTML = '방이 가득 찼습니다. 나중에 다시 시도해주세요.';
   });
 
-  socket.on('peer-disconnect', function(disconnectedPeerId) {
-    if (peerId === disconnectedPeerId) {
-      message.innerHTML = '상대방이 나가서 게임을 종료합니다.';
-      console.log(peerId);
-      eight.disabled = true;
-    }
+  socket.on('end', function() {
+    message.innerHTML = '상대방이 나가서 게임을 종료합니다.';
+    eight.disabled = true;
   });
 
   socket.on('eight', function(newPeerPoint) {
