@@ -16,6 +16,7 @@ function init() {
   var myPointView = document.getElementById('myPoint');
   var peerPointView = document.getElementById('peerPoint');
   var eight = document.getElementById('eight');
+  var eightSound = new Audio('./static/eight.wav');
 
   socket.on('message', function(data) {
     var li = document.createElement('li');
@@ -47,6 +48,7 @@ function init() {
   });
 
   eight.addEventListener('click', function() {
+    eightSound.play();
     myPoint += 1;
     updatePointView();
     socket.emit('eight', myPoint);
