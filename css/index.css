@@ -15,8 +15,10 @@ input, label {
   margin-top: 10px;
   display: block;
 }
-#board {
+#interactions {
   display: none;
+}
+#board {
   text-align:center;
 }
 #eight {

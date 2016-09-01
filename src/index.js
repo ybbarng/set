@@ -12,6 +12,7 @@ function init() {
   var box = document.getElementById('msg-box');
   var msgList = document.getElementById('msg-list');
   var message = document.getElementById('message');
+  var interactions = document.getElementById('interactions');
   var board = document.getElementById('board');
   var myPointView = document.getElementById('myPoint');
   var peerPointView = document.getElementById('peerPoint');
@@ -26,7 +27,7 @@ function init() {
 
   socket.on('start', function() {
     message.innerHTML = '연결되었습니다.';
-    board.style.display = 'block';
+    interactions.style.display = 'block';
     myPoint = 0;
     peerPoint = 0;
     updatePointView();
