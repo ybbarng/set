@@ -20,6 +20,7 @@ function init() {
   var interactions = document.getElementById('interactions');
   var reset = document.getElementById('reset');
   var draw = document.getElementById('draw');
+  var scoreboard = document.getElementById('scoreboard');
   var board = document.getElementById('board');
   var myPointView = document.getElementById('myPoint');
   var peerPointView = document.getElementById('peerPoint');
@@ -52,6 +53,21 @@ function init() {
       interactions.style.display = 'block';
     } else {
       interactions.style.display = 'none';
+    }
+
+    scoreboard.innerHTML = '';
+    for (var player in players) {
+      var playerView = document.createElement('div');
+      playerView.className += 'player-wrapper';
+      var playerNameView = document.createElement('div');
+      playerNameView.className += 'player-name';
+      playerNameView.innerHTML = (player === myId) ? 'Me' : player;
+      playerView.appendChild(playerNameView);
+      var playerScoreView = document.createElement('div');
+      playerScoreView.className += 'player-score';
+      playerScoreView.innerHTML = players[player];
+      playerView.appendChild(playerScoreView);
+      scoreboard.appendChild(playerView);
     }
   });
 
