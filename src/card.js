@@ -46,6 +46,10 @@ exports.Card.prototype = (function() {
     getView() {
       var cardView = document.createElement('div');
       cardView.className += 'card';
+      cardView.dataset.color = this.color;
+      cardView.dataset.shape = this.shape;
+      cardView.dataset.shading = this.shading;
+      cardView.dataset.count = this.count;
       var patternWrapper = document.createElement('div');
       patternWrapper.className += 'pattern-wrapper';
 
@@ -56,14 +60,19 @@ exports.Card.prototype = (function() {
       for (var i = 0; i < this.count; i++) {
         var pattern = document.createElement('div');
         pattern.className += 'pattern';
-        pattern.dataset.color = this.color;
-        pattern.dataset.shape = this.shape;
-        pattern.dataset.shading = this.shading;
         pattern.style.backgroundPosition = style;
         patternWrapper.appendChild(pattern);
       }
       cardView.appendChild(patternWrapper);
       return cardView;
+    },
+    cardToInt: function(color, shape, shading, count) {
+      return Color[color] * Math.pow(3, 3) +
+        Shape[shape] * Math.pow(3, 2) +
+        Shading[shading] * Math.pow(3, 1) +
+        Count[count] * Math.pow(3, 0);
     }
   };
 })();
+
+exports.cardToInt = exports.Card.prototype.cardToInt;

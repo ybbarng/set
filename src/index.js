@@ -100,6 +100,20 @@ function init() {
         return;
       }
       this.classList.add('selected');
+      console.log(Card.cardToInt(this.dataset.color,
+          this.dataset.shape,
+          this.dataset.shading,
+          this.dataset.count));
+    }
+  }
+
+  function clearSelect() {
+    var selectedCards = document.querySelectorAll('.card.selected');
+    if (selectedCards.length == 3) {
+      console.log('selected 3 cards');
+      for (var card of selectedCards) {
+        card.classList.remove('selected');
+      }
     }
   }
 }
