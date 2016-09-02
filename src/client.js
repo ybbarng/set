@@ -49,14 +49,21 @@ function init() {
 
   socket.on('players', function(players) {
     players = JSON.parse(players);
-    if (Object.keys(players).length > 1) {
+    var playerList = Object.keys(players);
+    if (playerList.length > 1) {
       interactions.style.display = 'block';
     } else {
       interactions.style.display = 'none';
     }
 
+    var myIndex = playerList.indexOf(myId);
+    if (myIndex !== -1) {
+      playerList.splice(myIndex, 1);
+      playerList.unshift(myId);
+    }
+
     scoreboard.innerHTML = '';
-    for (var player in players) {
+    for (var player of playerList) {
       var playerView = document.createElement('div');
       playerView.className += 'player-wrapper';
       var playerNameView = document.createElement('div');
