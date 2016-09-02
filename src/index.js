@@ -2,6 +2,8 @@ var io = require('socket.io-client');
 
 var Card = require('./card.js');
 
+var myId = '';
+
 var myPoint = 0;
 var peerPointView = 0;
 
@@ -32,17 +34,17 @@ function init() {
     msgList.appendChild(li);
   });
 
-  socket.on('start', function() {
-    message.innerHTML = '연결되었습니다.';
+  socket.on('connect', function() {
+    myId = socket.id;
+  });
+
+  socket.on('join', function(id) {
+    message.innerHTML = id + ' joined.';
     interactions.style.display = 'block';
   });
 
-  socket.on('full', function() {
-    message.innerHTML = '방이 가득 찼습니다. 나중에 다시 시도해주세요.';
-  });
-
-  socket.on('end', function() {
-    message.innerHTML = '상대방이 나갔습니다.';
+  socket.on('quit', function(id) {
+    message.innerHTML = id + ' has gone.';
   });
 
   socket.on('select-card', function(selectedIndexes) {

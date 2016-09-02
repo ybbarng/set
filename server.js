@@ -12,30 +12,18 @@ var peers = [];
 
 io.on('connection', function(socket) {
   console.log('A peer is trying to connect : %s', socket.id);
-  console.log(peers);
-  if (peers.length >= 2) {
-    console.log('No room for %s', socket.id);
-    socket.emit('full', null);
-    console.log(socket.disconnect);
-    socket.disconnect();
-    return;
-  }
   peers.push(socket);
   console.log('A peer is connected : %s', socket.id);
   console.log(peers.length);
-  if (peers.length === 2) {
-    io.sockets.emit('start', null);
-  }
+  socket.broadcast.emit('join', socket.id);
 
   socket.on('disconnect', function() {
     console.log('A peer is disconnected : %s', socket.id);
-    console.log(peers);
     var i = peers.indexOf(socket);
     if (i !== -1) {
       peers.splice(i, 1);
-      console.log(peers);
-      if (peers.length === 1) {
-        peers[0].emit('end');
+      for (var peer of peers) {
+        peer.emit('quit', socket.id);
       }
     }
   });
