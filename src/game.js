@@ -79,7 +79,7 @@ exports.Game.prototype = {
       }
       return newCards;
     }
-    return cards;
+    return false;
   },
   join: function(player) {
     this.players[player] = 0;

@@ -69,6 +69,11 @@ function init() {
     if (data.cards.length !== 3) {
       return;
     }
+    socket.emit('select-card', []);
+    if (!data.newCards) {
+      clearSelect();
+      return;
+    }
     for (var i = 0; i < data.cards.length; i++) {
       if (data.cards[i] !== data.newCards[i]) {
         var cardView = getCardView(new Card.Card(data.cards[i]));
