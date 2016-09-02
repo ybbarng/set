@@ -95,6 +95,10 @@ function init() {
     if (this.classList.contains('selected')) {
       this.classList.remove('selected');
     } else {
+      var selectedCards = document.querySelectorAll('.card.selected');
+      if (selectedCards.length >= 3) {
+        return;
+      }
       this.classList.add('selected');
     }
   }
