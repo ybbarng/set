@@ -66,6 +66,7 @@ io.on('connection', function(socket) {
   socket.on('reset', function() {
     game.reset();
     io.sockets.emit('table', game.table);
+    io.sockets.emit('players', JSON.stringify(game.players));
   });
 
   socket.on('draw', function() {
