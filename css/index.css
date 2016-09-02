@@ -53,6 +53,9 @@ input, label {
   -o-user-select: none;
   user-select: none;
 }
+.card.selected {
+  border: 1px solid #00e7ca;
+}
 .pattern-wrapper {
   margin: 10px auto;
 }

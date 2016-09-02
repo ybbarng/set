@@ -24,7 +24,9 @@ function init() {
   var testBoard = document.getElementById('test-board');
   for (var i = 0; i < 81; i++) {
     var card = new Card.Card(i);
-    testBoard.appendChild(card.getView());
+    var cardView = card.getView();
+    cardView.onclick = onClickCard;
+    testBoard.appendChild(cardView);
   }
 
   socket.on('message', function(data) {
@@ -87,6 +89,14 @@ function init() {
     }
     myPointView.style.fontSize = myFontSize + 'px';
     peerPointView.style.fontSize = peerFontSize + 'px';
+  }
+
+  function onClickCard() {
+    if (this.classList.contains('selected')) {
+      this.classList.remove('selected');
+    } else {
+      this.classList.add('selected');
+    }
   }
 }
 
