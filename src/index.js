@@ -58,6 +58,22 @@ function init() {
     updatePointView();
   });
 
+  socket.on('select-card', function(selectedIndexes) {
+    for (var card of document.querySelectorAll('.card.peer-selected')) {
+      card.classList.remove('peer-selected');
+    }
+    for (var index of selectedIndexes) {
+      var card = new Card.Card(index);
+      var cardView = document.querySelector('.card[data-color="' + card.color +
+          '"][data-shape="' + card.shape +
+          '"][data-shading="' + card.shading +
+          '"][data-count="' + card.count + '"]');
+      if (cardView) {
+        cardView.classList.add('peer-selected');
+      }
+    }
+  });
+
   eight.addEventListener('click', function() {
     eightSound.play();
     myPoint += 1;
@@ -92,18 +108,28 @@ function init() {
   }
 
   function onClickCard() {
+    var isChanged = false;
     if (this.classList.contains('selected')) {
       this.classList.remove('selected');
+      isChanged = true;
     } else {
       var selectedCards = document.querySelectorAll('.card.selected');
       if (selectedCards.length >= 3) {
         return;
       }
       this.classList.add('selected');
-      console.log(Card.cardToInt(this.dataset.color,
-          this.dataset.shape,
-          this.dataset.shading,
-          this.dataset.count));
+      isChanged = true;
+    }
+    if (isChanged) {
+      var selectedCards = document.querySelectorAll('.card.selected');
+      var selectedIndexes = [];
+      for (var card of selectedCards) {
+        selectedIndexes.push(Card.cardToInt(card.dataset.color,
+          card.dataset.shape,
+          card.dataset.shading,
+          card.dataset.count));
+      }
+      socket.emit('select-card', selectedIndexes);
     }
   }
 

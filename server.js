@@ -48,4 +48,9 @@ io.on('connection', function(socket) {
     console.log('Message from peer: %s', JSON.stringify(data));
     socket.broadcast.emit('message', data);
   });
+
+  socket.on('select-card', function(cards) {
+    console.log('%s selects cards : %s', socket.id, JSON.stringify(cards));
+    socket.broadcast.emit('select-card', cards);
+  });
 });
