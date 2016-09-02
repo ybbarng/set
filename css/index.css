@@ -60,7 +60,14 @@ input, label {
   -webkit-box-shadow: 2px 2px 3x rgba(0, 231, 202, 0.15);
 }
 .pattern-wrapper {
-  margin: 10px auto;
+  margin: 3px;
+  padding: 7px 0px 1px 0px;
+  border: 1px solid #fff;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+}
+.card.peer-selected .pattern-wrapper {
+  border: 1px solid rgb(255, 0, 102);
 }
 .pattern {
   width: 33px;
