@@ -48,14 +48,17 @@ exports.Card.prototype = (function() {
     getView() {
       var cardView = document.createElement('div');
       cardView.className += 'card';
+      var patternWrapper = document.createElement('div');
+      patternWrapper.className += 'pattern-wrapper';
       for (var i = 0; i < this.number; i++) {
         var pattern = document.createElement('div');
         pattern.className += 'pattern';
         pattern.dataset.color = this.color;
         pattern.dataset.shape = this.shape;
         pattern.dataset.shading = this.shading;
-        cardView.appendChild(pattern);
+        patternWrapper.appendChild(pattern);
       }
+      cardView.appendChild(patternWrapper);
       return cardView;
     }
   };
