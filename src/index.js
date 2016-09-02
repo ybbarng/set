@@ -1,4 +1,7 @@
 var io = require('socket.io-client');
+
+var Card = require('./card.js');
+
 var myPoint = 0;
 var peerPointView = 0;
 
@@ -18,6 +21,8 @@ function init() {
   var peerPointView = document.getElementById('peerPoint');
   var eight = document.getElementById('eight');
   var eightSound = new Audio('./static/eight.wav');
+  var card = new Card.Card(10);
+  msgList.appendChild(card.getView());
 
   socket.on('message', function(data) {
     var li = document.createElement('li');
