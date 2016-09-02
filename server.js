@@ -19,7 +19,7 @@ io.on('connection', function(socket) {
   console.log('A peer is connected : %s', socket.id);
   console.log(peers.length);
   game.join(socket.id);
-  socket.broadcast.emit('join', socket.id);
+  io.sockets.emit('players', JSON.stringify(game.players));
 
   socket.on('request-table', function() {
     socket.emit('table', game.table);
@@ -32,7 +32,7 @@ io.on('connection', function(socket) {
       peers.splice(i, 1);
       game.quit(socket.id);
       for (var peer of peers) {
-        peer.emit('quit', socket.id);
+        io.sockets.emit('players', JSON.stringify(game.players));
       }
     }
   });
@@ -52,6 +52,9 @@ io.on('connection', function(socket) {
     if (cards.length === 3) {
       var newCards = game.set(socket.id, cards);
       console.log('Is set? ' + Boolean(newCards));
+      if (newCards) {
+        io.sockets.emit('players', JSON.stringify(game.players));
+      }
     }
     io.sockets.emit('select-card', {
       user: socket.id,

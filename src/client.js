@@ -46,13 +46,10 @@ function init() {
     }
   });
 
-  socket.on('join', function(id) {
-    message.innerHTML = id + ' joined.';
+  socket.on('players', function(players) {
+    console.log(players);
+    message.innerHTML = players;
     interactions.style.display = 'block';
-  });
-
-  socket.on('quit', function(id) {
-    message.innerHTML = id + ' has gone.';
   });
 
   socket.on('select-card', function(data) {
