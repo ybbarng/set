@@ -21,7 +21,7 @@ exports.Card.prototype = (function() {
     'STRIPTED': 2
   };
 
-  var Number = {
+  var Count = {
     1 : 0,
     2 : 1,
     3 : 2
@@ -31,7 +31,7 @@ exports.Card.prototype = (function() {
     Color: Color,
     Shape: Shape,
     Shading: Shading,
-    Number: Number,
+    Count: Count,
     parseCard: function(index) {
       var index = index.toString(3);
       if (index.length < 4) {
@@ -41,7 +41,7 @@ exports.Card.prototype = (function() {
       this.color = Object.keys(Color)[index[0] * 1];
       this.shape = Object.keys(Shape)[index[1] * 1];
       this.shading = Object.keys(Shading)[index[2] * 1];
-      this.number = Object.keys(Number)[index[3] * 1] * 1;
+      this.count = Object.keys(Count)[index[3] * 1] * 1;
     },
     getView() {
       var cardView = document.createElement('div');
@@ -53,7 +53,7 @@ exports.Card.prototype = (function() {
       var left = (Color[this.color] * 3 + Shading[this.shading]) * 33;
       var style = '-' + left + 'px -' + top + 'px';
 
-      for (var i = 0; i < this.number; i++) {
+      for (var i = 0; i < this.count; i++) {
         var pattern = document.createElement('div');
         pattern.className += 'pattern';
         pattern.dataset.color = this.color;
