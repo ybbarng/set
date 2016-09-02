@@ -54,7 +54,10 @@ input, label {
   user-select: none;
 }
 .card.selected {
-  border: 1px solid #00e7ca;
+  border: 1px solid rgb(0, 231, 202);
+  box-shadow: 2px 2px 3px rgba(0, 231, 202, 0.15);
+  -moz-box-shadow: 2px 2px 3px rgba(0, 231, 202, 0.15);
+  -webkit-box-shadow: 2px 2px 3x rgba(0, 231, 202, 0.15);
 }
 .pattern-wrapper {
   margin: 10px auto;
