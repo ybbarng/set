@@ -69,8 +69,11 @@ exports.Game.prototype = {
         if (tableIndex === -1) {
           return false;
         }
-        var card = this.deck.pop();
-        if (typeof card !== 'undefined') {
+        var card = null;
+        if (this.table.length <= 12) {
+          card = this.deck.pop();
+        }
+        if (typeof card === 'number') {
           this.table[tableIndex] = card;
           newCards.push(card);
         } else {
