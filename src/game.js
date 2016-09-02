@@ -14,6 +14,7 @@ exports.Game.prototype = {
     for (var player in this.players) {
       this.players[player] = 0;
     }
+    this.table = [];
     this.deck = [];
     for (var i = 0; i < 81; i++) {
       this.deck.push(i);

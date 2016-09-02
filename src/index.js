@@ -18,6 +18,7 @@ function init() {
   var msgList = document.getElementById('msg-list');
   var message = document.getElementById('message');
   var interactions = document.getElementById('interactions');
+  var reset = document.getElementById('reset');
   var board = document.getElementById('board');
   var myPointView = document.getElementById('myPoint');
   var peerPointView = document.getElementById('peerPoint');
@@ -97,6 +98,10 @@ function init() {
     msgList.appendChild(li);
     socket.emit('message', {textVal: box.value});
     box.value = '';
+  });
+
+  reset.addEventListener('click', function() {
+    socket.emit('reset', null);
   });
 
   function onClickCard() {
