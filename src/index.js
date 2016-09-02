@@ -19,14 +19,11 @@ function init() {
   var board = document.getElementById('board');
   var myPointView = document.getElementById('myPoint');
   var peerPointView = document.getElementById('peerPoint');
-  var eight = document.getElementById('eight');
-  var eightSound = new Audio('./static/eight.wav');
-  var testBoard = document.getElementById('test-board');
   for (var i = 0; i < 81; i++) {
     var card = new Card.Card(i);
     var cardView = card.getView();
     cardView.onclick = onClickCard;
-    testBoard.appendChild(cardView);
+    board.appendChild(cardView);
   }
 
   socket.on('message', function(data) {
@@ -38,10 +35,6 @@ function init() {
   socket.on('start', function() {
     message.innerHTML = '연결되었습니다.';
     interactions.style.display = 'block';
-    myPoint = 0;
-    peerPoint = 0;
-    updatePointView();
-    eight.disabled = false;
   });
 
   socket.on('full', function() {
@@ -49,13 +42,7 @@ function init() {
   });
 
   socket.on('end', function() {
-    message.innerHTML = '상대방이 나가서 게임을 종료합니다.';
-    eight.disabled = true;
-  });
-
-  socket.on('eight', function(newPeerPoint) {
-    peerPoint = newPeerPoint;
-    updatePointView();
+    message.innerHTML = '상대방이 나갔습니다.';
   });
 
   socket.on('select-card', function(selectedIndexes) {
@@ -74,13 +61,6 @@ function init() {
     }
   });
 
-  eight.addEventListener('click', function() {
-    eightSound.play();
-    myPoint += 1;
-    updatePointView();
-    socket.emit('eight', myPoint);
-  });
-
   form.addEventListener('submit', function(e, d) {
     e.preventDefault();
     var li = document.createElement('li');
@@ -89,23 +69,6 @@ function init() {
     socket.emit('message', {textVal: box.value});
     box.value = '';
   });
-
-  function updatePointView() {
-    myPointView.innerHTML = myPoint;
-    peerPointView.innerHTML = peerPoint;
-    var difference = myPoint - peerPoint;
-    console.log(difference);
-    var defaultSize = 30;
-    var myFontSize = defaultSize;
-    var peerFontSize = defaultSize;
-    if (difference > 0) {
-      myFontSize += difference;
-    } else if (difference < 0) {
-      peerFontSize -= difference;
-    }
-    myPointView.style.fontSize = myFontSize + 'px';
-    peerPointView.style.fontSize = peerFontSize + 'px';
-  }
 
   function onClickCard() {
     var isChanged = false;
