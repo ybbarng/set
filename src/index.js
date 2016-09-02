@@ -22,7 +22,7 @@ function init() {
   var eight = document.getElementById('eight');
   var eightSound = new Audio('./static/eight.wav');
   var testBoard = document.getElementById('test-board');
-	for(var i = 0; i < 81; i++) {
+  for (var i = 0; i < 81; i++) {
     var card = new Card.Card(i);
     testBoard.appendChild(card.getView());
   }

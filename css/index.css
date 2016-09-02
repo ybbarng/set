@@ -32,6 +32,8 @@ input, label {
   width: 120px;
   height: 75px;
 	text-align: center;
+  float: left;
+  margin: 5px;
 
   border: 1px solid #666;
   border-radius: 10px;
@@ -53,7 +55,6 @@ input, label {
 .pattern {
   width: 33px;
   height: 55px;
-  margin-right: 5px;
   display: inline-block;
   background: url("https://raw.githubusercontent.com/vincentwoo/setgame/master/public/perm/cards.png") no-repeat;
 }
