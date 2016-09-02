@@ -76,3 +76,7 @@ exports.Card.prototype = (function() {
 })();
 
 exports.cardToInt = exports.Card.prototype.cardToInt;
+exports.Color = exports.Card.prototype.Color;
+exports.Shape = exports.Card.prototype.Shape;
+exports.Shading = exports.Card.prototype.Shading;
+exports.Count = exports.Card.prototype.Count;

@@ -8,6 +8,9 @@ server.listen(1225, function() {
   console.log('Listening on 1225');
 });
 
+var Game = require('./src/game.js');
+var game = new Game.Game();
+
 var peers = [];
 
 io.on('connection', function(socket) {
@@ -15,13 +18,19 @@ io.on('connection', function(socket) {
   peers.push(socket);
   console.log('A peer is connected : %s', socket.id);
   console.log(peers.length);
+  game.join(socket.id);
   socket.broadcast.emit('join', socket.id);
+
+  socket.on('request-table', function() {
+    socket.emit('table', game.table);
+  });
 
   socket.on('disconnect', function() {
     console.log('A peer is disconnected : %s', socket.id);
     var i = peers.indexOf(socket);
     if (i !== -1) {
       peers.splice(i, 1);
+      game.quit(socket.id);
       for (var peer of peers) {
         peer.emit('quit', socket.id);
       }

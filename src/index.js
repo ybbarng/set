@@ -21,12 +21,6 @@ function init() {
   var board = document.getElementById('board');
   var myPointView = document.getElementById('myPoint');
   var peerPointView = document.getElementById('peerPoint');
-  for (var i = 0; i < 81; i++) {
-    var card = new Card.Card(i);
-    var cardView = card.getView();
-    cardView.onclick = onClickCard;
-    board.appendChild(cardView);
-  }
 
   socket.on('message', function(data) {
     var li = document.createElement('li');
@@ -36,6 +30,16 @@ function init() {
 
   socket.on('connect', function() {
     myId = socket.id;
+    socket.emit('request-table', null);
+  });
+
+  socket.on('table', function(table) {
+    for (var cardIndex of table) {
+      var card = new Card.Card(cardIndex);
+      var cardView = card.getView();
+      cardView.onclick = onClickCard;
+      board.appendChild(cardView);
+    }
   });
 
   socket.on('join', function(id) {
