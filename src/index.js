@@ -19,6 +19,7 @@ function init() {
   var message = document.getElementById('message');
   var interactions = document.getElementById('interactions');
   var reset = document.getElementById('reset');
+  var draw = document.getElementById('draw');
   var board = document.getElementById('board');
   var myPointView = document.getElementById('myPoint');
   var peerPointView = document.getElementById('peerPoint');
@@ -102,6 +103,10 @@ function init() {
 
   reset.addEventListener('click', function() {
     socket.emit('reset', null);
+  });
+
+  draw.addEventListener('click', function() {
+    socket.emit('draw', null);
   });
 
   function onClickCard() {

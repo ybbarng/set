@@ -59,8 +59,14 @@ io.on('connection', function(socket) {
       newCards: newCards
     });
   });
+
   socket.on('reset', function() {
     game.reset();
+    io.sockets.emit('table', game.table);
+  });
+
+  socket.on('draw', function() {
+    game.draw(3);
     io.sockets.emit('table', game.table);
   });
 });
