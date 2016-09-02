@@ -29,11 +29,13 @@ function init() {
   });
 
   socket.on('connect', function() {
-    myId = socket.id;
+    myId = '/#' + socket.id;
+    console.log(myId);
     socket.emit('request-table', null);
   });
 
   socket.on('table', function(table) {
+    board.innerHTML = '';
     for (var cardIndex of table) {
       var card = new Card.Card(cardIndex);
       var cardView = card.getView();
@@ -51,18 +53,34 @@ function init() {
     message.innerHTML = id + ' has gone.';
   });
 
-  socket.on('select-card', function(selectedIndexes) {
-    for (var card of document.querySelectorAll('.card.peer-selected')) {
-      card.classList.remove('peer-selected');
+  socket.on('select-card', function(data) {
+    if (data.user !== myId) {
+      for (var card of document.querySelectorAll('.card.peer-selected')) {
+        card.classList.remove('peer-selected');
+      }
+      for (var index of data.cards) {
+        var card = new Card.Card(index);
+        var cardView = getCardView(card);
+        if (cardView) {
+          cardView.classList.add('peer-selected');
+        }
+      }
     }
-    for (var index of selectedIndexes) {
-      var card = new Card.Card(index);
-      var cardView = document.querySelector('.card[data-color="' + card.color +
-          '"][data-shape="' + card.shape +
-          '"][data-shading="' + card.shading +
-          '"][data-count="' + card.count + '"]');
-      if (cardView) {
-        cardView.classList.add('peer-selected');
+    if (data.cards.length !== 3) {
+      return;
+    }
+    for (var i = 0; i < data.cards.length; i++) {
+      if (data.cards[i] !== data.newCards[i]) {
+        var cardView = getCardView(new Card.Card(data.cards[i]));
+        if (cardView) {
+          if (data.newCards[i] == -1) {
+            cardView.parentNode.removeChild(cardView);
+          } else {
+            var newCardView = (new Card.Card(data.newCards[i])).getView();
+            newCardView.onclick = onClickCard;
+            cardView.parentNode.replaceChild(newCardView, cardView);
+          }
+        }
       }
     }
   });
@@ -110,6 +128,14 @@ function init() {
         card.classList.remove('selected');
       }
     }
+  }
+
+  function getCardView(card) {
+
+    return document.querySelector('.card[data-color="' + card.color +
+      '"][data-shape="' + card.shape +
+      '"][data-shading="' + card.shading +
+      '"][data-count="' + card.count + '"]');
   }
 }
 

@@ -48,6 +48,21 @@ io.on('connection', function(socket) {
 
   socket.on('select-card', function(cards) {
     console.log('%s selects cards : %s', socket.id, JSON.stringify(cards));
-    socket.broadcast.emit('select-card', cards);
+    var newCards = cards;
+    if (cards.length === 3) {
+      newCards = game.set(socket.id, cards);
+      var isSet = false;
+      for (var i = 0; i < cards.length; i++) {
+        if (cards[i] !== newCards[i]) {
+          isSet = true;
+        }
+      }
+      console.log('Is set? ' + isSet);
+    }
+    io.sockets.emit('select-card', {
+      user: socket.id,
+      cards: cards,
+      newCards: newCards
+    });
   });
 });
