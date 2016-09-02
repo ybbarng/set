@@ -47,9 +47,12 @@ function init() {
   });
 
   socket.on('players', function(players) {
-    console.log(players);
-    message.innerHTML = players;
-    interactions.style.display = 'block';
+    players = JSON.parse(players);
+    if (Object.keys(players).length > 1) {
+      interactions.style.display = 'block';
+    } else {
+      interactions.style.display = 'none';
+    }
   });
 
   socket.on('select-card', function(data) {
