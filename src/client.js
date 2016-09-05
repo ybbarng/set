@@ -48,7 +48,7 @@ function init() {
   });
 
   socket.on('set-is-exist', function() {
-    message.innerHTML = 'There are one or more sets.';
+    message.innerHTML = '왜 찾질 못하니';
   });
 
   socket.on('players', function(players) {
