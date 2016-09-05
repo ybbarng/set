@@ -70,7 +70,11 @@ io.on('connection', function(socket) {
   });
 
   socket.on('draw', function() {
-    game.draw(3);
-    io.sockets.emit('table', game.table);
+    if (game.set) {
+      socket.emit('set-is-exist', null);
+    } else {
+      game.draw(3);
+      io.sockets.emit('table', game.table);
+    }
   });
 });

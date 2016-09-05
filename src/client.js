@@ -47,6 +47,10 @@ function init() {
     }
   });
 
+  socket.on('set-is-exist', function() {
+    message.innerHTML = 'There are one or more sets.';
+  });
+
   socket.on('players', function(players) {
     players = JSON.parse(players);
     var playerList = Object.keys(players);
