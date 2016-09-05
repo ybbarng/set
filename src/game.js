@@ -89,7 +89,7 @@ exports.Game.prototype = {
   },
   updateSetExistence: function() {
     this.set = false;
-    var table = this.table.slice().sort();
+    var table = this.table.slice().sort(function(a, b) { return a - b; });
     for (var setIndex = 0; setIndex < sets.length; setIndex++) {
       var set = [];
       var cardIndex = 0;
