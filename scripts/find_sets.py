@@ -18,9 +18,9 @@ for i in range(81):
 
 sets = []
 for i in range(81):
-    for j in range(i, 81):
-        for k in range(j, 81):
-            if set(map(len, map(set, zip(deck[i], deck[j], deck[k])))) == set({1, 3}):
+    for j in range(i + 1, 81):
+        for k in range(j + 1, 81):
+            if 2 not in set(map(len, map(set, zip(deck[i], deck[j], deck[k])))):
                 sets.append((i, j, k))
 print(sets)
 
