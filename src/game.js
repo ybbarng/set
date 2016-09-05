@@ -1,4 +1,5 @@
 var Card = require('./card.js');
+var sets = require('../static/sets.json');
 
 exports.Game = function() {
   this.initiate();
@@ -15,6 +16,7 @@ exports.Game.prototype = {
       this.players[player] = 0;
     }
     this.table = [];
+    this.set = false;
     this.deck = [];
     for (var i = 0; i < 81; i++) {
       this.deck.push(i);
@@ -34,15 +36,14 @@ exports.Game.prototype = {
   draw: function(count) {
     for (var i = 0; i < count; i++) {
       var card = this.deck.pop();
-      if (typeof card !== 'undefined') {
-        this.table.push(card);
-      } else {
-        return false;
+      if (typeof card === 'undefined') {
+        break;
       }
+      this.table.push(card);
     }
-    return true;
+    this.updateSetExistence();
   },
-  set: function(player, cards) {
+  checkSet: function(player, cards) {
     var colorSet = new Set();
     var shapeSet = new Set();
     var shadingSet = new Set();
@@ -81,9 +82,29 @@ exports.Game.prototype = {
           newCards.push(-1);
         }
       }
+      this.updateSetExistence();
       return newCards;
     }
     return false;
+  },
+  updateSetExistence: function() {
+    this.set = false;
+    var table = this.table.slice().sort();
+    for (var setIndex = 0; setIndex < sets.length; setIndex++) {
+      var set = [];
+      var cardIndex = 0;
+      for (var tableIndex = 0; tableIndex < table.length; tableIndex++) {
+        if (table[tableIndex] === sets[setIndex][cardIndex]) {
+          cardIndex += 1;
+          set.push(this.table.indexOf(table[tableIndex]) + 1);
+        }
+      }
+      if (cardIndex === 3) {
+        this.set = set;
+        console.log('set : ' + set.sort());
+        return;
+      }
+    }
   },
   join: function(player) {
     this.players[player] = 0;

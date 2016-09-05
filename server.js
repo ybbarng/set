@@ -50,7 +50,7 @@ io.on('connection', function(socket) {
     console.log('%s selects cards : %s', socket.id, JSON.stringify(cards));
     var newCards = false;
     if (cards.length === 3) {
-      var newCards = game.set(socket.id, cards);
+      var newCards = game.checkSet(socket.id, cards);
       console.log('Is set? ' + Boolean(newCards));
       if (newCards) {
         io.sockets.emit('players', JSON.stringify(game.players));
