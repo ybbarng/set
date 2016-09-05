@@ -80,7 +80,9 @@ function init() {
 
   socket.on('select-card', function(data) {
     if (data.user !== myId) {
-      for (var card of document.querySelectorAll('.card.peer-selected')) {
+      var peerSelectedCards = document.querySelectorAll('.card.peer-selected');
+      for (var i = 0; i < peerSelectedCards.length; i++) {
+        var card = peerSelectedCards[i];
         card.classList.remove('peer-selected');
       }
       for (var index of data.cards) {
@@ -148,7 +150,8 @@ function init() {
     if (isChanged) {
       var selectedCards = document.querySelectorAll('.card.selected');
       var selectedIndexes = [];
-      for (var card of selectedCards) {
+      for (var i = 0; i < selectedCards.length; i++) {
+        var card = selectedCards[i];
         selectedIndexes.push(Card.cardToInt(card.dataset.color,
           card.dataset.shape,
           card.dataset.shading,
@@ -162,7 +165,8 @@ function init() {
     var selectedCards = document.querySelectorAll('.card.selected');
     if (selectedCards.length == 3) {
       console.log('selected 3 cards');
-      for (var card of selectedCards) {
+      for (var i = 0; i < selectedCards.length; i++) {
+        var card = selectedCards[i];
         card.classList.remove('selected');
       }
     }
