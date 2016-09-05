@@ -105,6 +105,7 @@ exports.Game.prototype = {
         return;
       }
     }
+    console.log('There is no set. : ' + table);
   },
   join: function(player) {
     this.players[player] = 0;
