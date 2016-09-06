@@ -61,6 +61,8 @@ exports.Game.prototype = {
         [1, 3].indexOf(countSet.size) !== -1;
     if (isSet) {
       if (!(player in this.players)) {
+        console.log('There is no such player %s in %s',
+            player, JSON.stringify(this.players));
         return false;
       }
       this.players[player] += 3;
@@ -68,6 +70,8 @@ exports.Game.prototype = {
       for (var cardIndex of cards) {
         var tableIndex = this.table.indexOf(cardIndex);
         if (tableIndex === -1) {
+          console.log('There is no such card %d in %s',
+              cardIndex, JSON.stringify(this.table));
           return false;
         }
         var card = null;
