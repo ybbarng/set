@@ -100,6 +100,8 @@ function init() {
     if (data.user === myId && !data.newCards) {
       socket.emit('select-card', []);
       clearSelect();
+    }
+    if (!data.newCards) {
       return;
     }
     for (var i = 0; i < data.cards.length; i++) {
