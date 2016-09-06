@@ -1,11 +1,10 @@
+var $ = require('jquery');
 var io = require('socket.io-client');
 
 var Card = require('./card.js');
 
-var $ = require('jquery');
 
 var myId = '';
-
 var myPoint = 0;
 var peerPointView = 0;
 console.log($('message'));
