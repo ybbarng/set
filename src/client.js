@@ -7,30 +7,29 @@ var Card = require('./card.js');
 var myId = '';
 var myPoint = 0;
 var peerPointView = 0;
-console.log($('message'));
 
 function init() {
   var socket = io();
   var opts = {peerOpts: {trickle: false}, autoUpgrade: false};
 
   // Elements
-  var privateButton = document.getElementById('private');
-  var form = document.getElementById('msg-form');
-  var box = document.getElementById('msg-box');
-  var msgList = document.getElementById('msg-list');
-  var message = document.getElementById('message');
-  var interactions = document.getElementById('interactions');
-  var reset = document.getElementById('reset');
-  var draw = document.getElementById('draw');
-  var scoreboard = document.getElementById('scoreboard');
-  var board = document.getElementById('board');
-  var myPointView = document.getElementById('myPoint');
-  var peerPointView = document.getElementById('peerPoint');
+  var privateButton = $('#private');
+  var form = $('#msg-form');
+  var box = $('#msg-box');
+  var msgList = $('#msg-list');
+  var message = $('#message');
+  var interactions = $('#interactions');
+  var reset = $('#reset');
+  var draw = $('#draw');
+  var scoreboard = $('#scoreboard');
+  var board = $('#board');
+  var myPointView = $('#myPoint');
+  var peerPointView = $('#peerPoint');
 
   socket.on('message', function(data) {
-    var li = document.createElement('li');
-    li.appendChild(document.createTextNode(data.textVal));
-    msgList.appendChild(li);
+    var li = $('<li>');
+    li.text(data.textVal);
+    msgList.append(li);
   });
 
   socket.on('connect', function() {
@@ -40,26 +39,26 @@ function init() {
   });
 
   socket.on('table', function(table) {
-    board.innerHTML = '';
+    board.empty();
     for (var cardIndex of table) {
       var card = new Card.Card(cardIndex);
-      var cardView = card.getView();
-      cardView.onclick = onClickCard;
-      board.appendChild(cardView);
+      var cardView = $(card.getView());
+      cardView.click(onClickCard);
+      board.append(cardView);
     }
   });
 
   socket.on('set-is-exist', function() {
-    message.innerHTML = '왜 찾질 못하니';
+    message.text('왜 찾질 못하니');
   });
 
   socket.on('players', function(players) {
     players = JSON.parse(players);
     var playerList = Object.keys(players);
     if (playerList.length > 1) {
-      interactions.style.display = 'block';
+      interactions.css('display', 'block');
     } else {
-      interactions.style.display = 'none';
+      interactions.css('display', 'none');
     }
 
     var myIndex = playerList.indexOf(myId);
@@ -68,34 +67,32 @@ function init() {
       playerList.unshift(myId);
     }
 
-    scoreboard.innerHTML = '';
+    scoreboard.empty();
     for (var player of playerList) {
-      var playerView = document.createElement('div');
-      playerView.className += 'player-wrapper';
-      var playerNameView = document.createElement('div');
-      playerNameView.className += 'player-name';
-      playerNameView.innerHTML = (player === myId) ? 'Me' : player;
-      playerView.appendChild(playerNameView);
-      var playerScoreView = document.createElement('div');
-      playerScoreView.className += 'player-score';
-      playerScoreView.innerHTML = players[player];
-      playerView.appendChild(playerScoreView);
-      scoreboard.appendChild(playerView);
+      var playerView = $('<div>');
+      playerView.addClass('player-wrapper');
+      var playerNameView = $('<div>');
+      playerNameView.addClass('player-name');
+      playerNameView.text((player === myId) ? 'Me' : player);
+      playerView.append(playerNameView);
+      var playerScoreView = $('<div>');
+      playerScoreView.addClass('player-score');
+      playerScoreView.text(players[player]);
+      playerView.append(playerScoreView);
+      scoreboard.append(playerView);
     }
   });
 
   socket.on('select-card', function(data) {
     if (data.user !== myId) {
-      var peerSelectedCards = document.querySelectorAll('.card.peer-selected');
-      for (var i = 0; i < peerSelectedCards.length; i++) {
-        var card = peerSelectedCards[i];
-        card.classList.remove('peer-selected');
-      }
+      $('.card.peer-selected').each(function() {
+        $(this).removeClass('peer-selected');
+      });
       for (var index of data.cards) {
         var card = new Card.Card(index);
         var cardView = getCardView(card);
         if (cardView) {
-          cardView.classList.add('peer-selected');
+          cardView.addClass('peer-selected');
         }
       }
     }
@@ -112,79 +109,78 @@ function init() {
         var cardView = getCardView(new Card.Card(data.cards[i]));
         if (cardView) {
           if (data.newCards[i] == -1) {
-            cardView.parentNode.removeChild(cardView);
+            cardView.remove();
           } else {
-            var newCardView = (new Card.Card(data.newCards[i])).getView();
-            newCardView.onclick = onClickCard;
-            cardView.parentNode.replaceChild(newCardView, cardView);
+            var newCardView = $(new Card.Card(data.newCards[i]).getView());
+            newCardView.click(onClickCard);
+            cardView.replaceWith(newCardView);
           }
         }
       }
     }
   });
 
-  form.addEventListener('submit', function(e, d) {
+  form.on('submit', function(e) {
     e.preventDefault();
-    var li = document.createElement('li');
-    li.appendChild(document.createTextNode(box.value));
-    msgList.appendChild(li);
-    socket.emit('message', {textVal: box.value});
-    box.value = '';
+    var li = $('<li>');
+    li.text((box.val()));
+    msgList.append(li);
+    socket.emit('message', {textVal: box.val()});
+    box.val('');
   });
 
-  reset.addEventListener('click', function() {
+  reset.on('click', function() {
     socket.emit('reset', null);
   });
 
-  draw.addEventListener('click', function() {
+  draw.on('click', function() {
     socket.emit('draw', null);
   });
 
   function onClickCard() {
     var isChanged = false;
-    if (this.classList.contains('selected')) {
-      this.classList.remove('selected');
+    if ($(this).hasClass('selected')) {
+      $(this).removeClass('selected');
       isChanged = true;
     } else {
-      var selectedCards = document.querySelectorAll('.card.selected');
+      var selectedCards = $('.card.selected');
       if (selectedCards.length >= 3) {
         return;
       }
-      this.classList.add('selected');
+      $(this).addClass('selected');
       isChanged = true;
     }
     if (isChanged) {
-      var selectedCards = document.querySelectorAll('.card.selected');
       var selectedIndexes = [];
-      for (var i = 0; i < selectedCards.length; i++) {
-        var card = selectedCards[i];
-        selectedIndexes.push(Card.cardToInt(card.dataset.color,
-          card.dataset.shape,
-          card.dataset.shading,
-          card.dataset.count));
-      }
+      $('.card.selected').each(function() {
+        var data = $(this).data();
+        selectedIndexes.push(Card.cardToInt(
+              data.color,
+              data.shape,
+              data.shading,
+              data.count));
+      });
       socket.emit('select-card', selectedIndexes);
     }
   }
 
   function clearSelect() {
-    var selectedCards = document.querySelectorAll('.card.selected');
+    var selectedCards = $('.card.selected');
     if (selectedCards.length == 3) {
       console.log('selected 3 cards');
-      for (var i = 0; i < selectedCards.length; i++) {
-        var card = selectedCards[i];
-        card.classList.remove('selected');
-      }
+      selectedCards.each(function() {
+        $(this).removeClass('selected');
+      });
     }
   }
 
   function getCardView(card) {
 
-    return document.querySelector('.card[data-color="' + card.color +
+    return $('.card[data-color="' + card.color +
       '"][data-shape="' + card.shape +
       '"][data-shading="' + card.shading +
       '"][data-count="' + card.count + '"]');
   }
 }
 
-document.addEventListener('DOMContentLoaded', init, false);
+$(init);
