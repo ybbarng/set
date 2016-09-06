@@ -91,16 +91,14 @@ function init() {
       for (var index of data.cards) {
         var card = new Card.Card(index);
         var cardView = getCardView(card);
-        if (cardView) {
-          cardView.addClass('peer-selected');
-        }
+        cardView.addClass('peer-selected');
       }
     }
     if (data.cards.length !== 3) {
       return;
     }
-    socket.emit('select-card', []);
-    if (!data.newCards) {
+    if (data.user === myId && !data.newCards) {
+      socket.emit('select-card', []);
       clearSelect();
       return;
     }
