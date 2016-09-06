@@ -107,15 +107,19 @@ function init() {
     for (var i = 0; i < data.cards.length; i++) {
       if (data.cards[i] !== data.newCards[i]) {
         var cardView = getCardView(new Card.Card(data.cards[i]));
-        if (cardView) {
-          if (data.newCards[i] == -1) {
-            cardView.remove();
-          } else {
-            var newCardView = $(new Card.Card(data.newCards[i]).getView());
-            newCardView.click(onClickCard);
-            cardView.replaceWith(newCardView);
-          }
-        }
+        cardView.fadeOut('slow', (function(newCard) {
+          return function() {
+            if (newCard == -1) {
+              $(this).remove();
+            } else {
+              var newCardView = $(new Card.Card(newCard).getView())
+                .hide();
+              newCardView.click(onClickCard);
+              $(this).replaceWith(newCardView);
+              newCardView.fadeIn();
+            }
+          };
+        })(data.newCards[i]));
       }
     }
   });
