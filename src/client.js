@@ -98,7 +98,9 @@ function init() {
       return;
     }
     if (data.user === myId && !data.newCards) {
-      socket.emit('select-card', []);
+      setTimeout(function() {
+        socket.emit('select-card', []);
+      }, 150);
       clearSelect();
     }
     if (!data.newCards) {
