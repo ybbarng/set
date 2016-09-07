@@ -17,7 +17,8 @@
     "transform": ["browserify-shim"]
   },
   "browserify-shim": {
-    "jquery": "global:$",
-    "socket.io-client": "global:io"
+    "socket.io-client": "global:io",
+    "js-cookie": "global:Cookies",
+    "jquery": "global:$"
   }
 }

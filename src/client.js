@@ -1,5 +1,6 @@
-var $ = require('jquery');
 var io = require('socket.io-client');
+var Cookies = require('js-cookie');
+var $ = require('jquery');
 
 var Card = require('./card.js');
 
