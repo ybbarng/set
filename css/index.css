@@ -49,6 +49,9 @@ input, label {
   height: 15px;
   clear: both;
 }
+.player-wrapper.me {
+  font-weight: bold;
+}
 .player-wrapper.connected {
   color: black;
 }

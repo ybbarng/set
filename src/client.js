@@ -83,9 +83,13 @@ function init() {
       playerView.addClass('player-wrapper');
       playerView.addClass(players[player].connected ?
           'connected' : 'disconnected');
+      var isMe = (player === myId);
+      if (isMe) {
+        playerView.addClass('me');
+      }
       var playerNameView = $('<div>');
       playerNameView.addClass('player-name');
-      playerNameView.text((player === myId) ? 'Me' : player);
+      playerNameView.text(player + (isMe ? ' (나)' : ''));
       playerView.append(playerNameView);
       var playerScoreView = $('<span>');
       playerScoreView.addClass('player-score');
