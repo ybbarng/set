@@ -1,6 +1,7 @@
 var Card = require('./card.js');
 var sets = require('../static/sets.json');
 
+
 exports.Game = function() {
   this.initiate();
 };

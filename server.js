@@ -4,13 +4,14 @@ var server = require('http').createServer(
 );
 var io = require('socket.io')(server);
 
+var Game = require('./src/game.js');
+
+
 server.listen(1225, function() {
   console.log('Listening on 1225');
 });
 
-var Game = require('./src/game.js');
 var game = new Game.Game();
-
 var peers = [];
 
 io.on('connection', function(socket) {
