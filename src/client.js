@@ -68,6 +68,10 @@ function init() {
     }
   });
 
+  socket.on('game-over', function() {
+    message.text('게임이 종료되었습니다.');
+  });
+
   socket.on('set-is-exist', function() {
     message.text('왜 찾질 못하니');
   });

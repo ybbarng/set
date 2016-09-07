@@ -57,6 +57,9 @@ io.on('connection', function(socket) {
       if (newCards) {
         io.sockets.emit('players', JSON.stringify(game.players));
       }
+      if (game.isOver()) {
+        io.sockets.emit('game-over', null);
+      }
     }
     io.sockets.emit('select-card', {
       user: socket.peerId,

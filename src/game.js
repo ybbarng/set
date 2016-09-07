@@ -108,6 +108,9 @@ exports.Game.prototype = {
     }
     console.log('There is no set. : ' + table);
   },
+  isOver: function() {
+    return !this.set && this.deck.length == 0;
+  },
   connect: function(player) {
     if (player in this.players) {
       this.players[player].connected += 1;
