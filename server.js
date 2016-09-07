@@ -12,29 +12,34 @@ server.listen(1225, function() {
 });
 
 var game = new Game.Game();
-var peers = [];
+var sockets = [];
 
 io.on('connection', function(socket) {
-  console.log('A peer is trying to connect : %s', socket.id);
-  peers.push(socket);
-  console.log('A peer is connected : %s', socket.id);
-  console.log(peers.length);
-  game.join(socket.id);
-  io.sockets.emit('players', JSON.stringify(game.players));
+  console.log('A socket is trying to connect : %s', socket.id);
+  sockets.push(socket);
+  console.log('A socket is connected : %s', socket.id);
+  console.log(sockets.length);
+
+  socket.on('join', function(peerId) {
+    console.log('A peer is trying to connect : %s', socket.peerId);
+    socket.peerId = peerId;
+    console.log('A peer is connected : %s', socket.peerId);
+    console.log(sockets.length);
+    game.connect(socket.peerId);
+    io.sockets.emit('players', JSON.stringify(game.players));
+  });
 
   socket.on('request-table', function() {
     socket.emit('table', game.table);
   });
 
   socket.on('disconnect', function() {
-    console.log('A peer is disconnected : %s', socket.id);
-    var i = peers.indexOf(socket);
+    console.log('A socket is disconnected : %s %s', socket.id, socket.peerId);
+    var i = sockets.indexOf(socket);
     if (i !== -1) {
-      peers.splice(i, 1);
-      game.quit(socket.id);
-      for (var peer of peers) {
-        io.sockets.emit('players', JSON.stringify(game.players));
-      }
+      sockets.splice(i, 1);
+      game.disconnect(socket.peerId);
+      io.sockets.emit('players', JSON.stringify(game.players));
     }
   });
 
@@ -44,17 +49,17 @@ io.on('connection', function(socket) {
   });
 
   socket.on('select-card', function(cards) {
-    console.log('%s selects cards : %s', socket.id, JSON.stringify(cards));
+    console.log('%s selects cards : %s', socket.peerId, JSON.stringify(cards));
     var newCards = false;
     if (cards.length === 3) {
-      var newCards = game.checkSet(socket.id, cards);
+      var newCards = game.checkSet(socket.peerId, cards);
       console.log('Is set? ' + Boolean(newCards));
       if (newCards) {
         io.sockets.emit('players', JSON.stringify(game.players));
       }
     }
     io.sockets.emit('select-card', {
-      user: socket.id,
+      user: socket.peerId,
       cards: cards,
       newCards: newCards
     });
@@ -63,7 +68,7 @@ io.on('connection', function(socket) {
   socket.on('reset', function() {
     game.reset();
     io.sockets.emit('table', game.table);
-    io.sockets.emit('players', JSON.stringify(game.players));
+    io.sockets.emit('reset', null);
   });
 
   socket.on('draw', function() {

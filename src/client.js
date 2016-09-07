@@ -33,9 +33,18 @@ function init() {
   });
 
   socket.on('connect', function() {
-    myId = '/#' + socket.id;
+    myId = Cookies.get('myId');
+    if (!myId) {
+      myId = '/#' + socket.id;
+      Cookies.set('myId', myId);
+    }
     console.log(myId);
+    socket.emit('join', myId);
     socket.emit('request-table', null);
+  });
+
+  socket.on('reset', function() {
+    socket.emit('join', myId);
   });
 
   socket.on('table', function(table) {
@@ -75,9 +84,9 @@ function init() {
       playerNameView.addClass('player-name');
       playerNameView.text((player === myId) ? 'Me' : player);
       playerView.append(playerNameView);
-      var playerScoreView = $('<div>');
+      var playerScoreView = $('<span>');
       playerScoreView.addClass('player-score');
-      playerScoreView.text(players[player]);
+      playerScoreView.text(players[player].score);
       playerView.append(playerScoreView);
       scoreboard.append(playerView);
     }

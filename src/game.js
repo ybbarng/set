@@ -8,14 +8,10 @@ exports.Game = function() {
 
 exports.Game.prototype = {
   initiate: function() {
-    this.players = {};
-    this.table = [];
     this.reset();
   },
   reset: function() {
-    for (var player in this.players) {
-      this.players[player] = 0;
-    }
+    this.players = {};
     this.table = [];
     this.set = false;
     this.deck = [];
@@ -66,7 +62,7 @@ exports.Game.prototype = {
             player, JSON.stringify(this.players));
         return false;
       }
-      this.players[player] += 3;
+      this.players[player].score += 3;
       var newCards = [];
       for (var cardIndex of cards) {
         var tableIndex = this.table.indexOf(cardIndex);
@@ -112,10 +108,19 @@ exports.Game.prototype = {
     }
     console.log('There is no set. : ' + table);
   },
-  join: function(player) {
-    this.players[player] = 0;
+  connect: function(player) {
+    if (player in this.players) {
+      this.players[player].connected += 1;
+    } else {
+      this.players[player] = {
+        connected: 1,
+        score: 0
+      };
+    }
   },
-  quit: function(player) {
-    delete this.players[player];
+  disconnect: function(player) {
+    if (player in this.players) {
+      this.players[player].connected -= 1;
+    }
   }
 };
