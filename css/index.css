@@ -121,5 +121,5 @@ input, label {
   width: 33px;
   height: 55px;
   display: inline-block;
-  background: url("https://raw.githubusercontent.com/vincentwoo/setgame/master/public/perm/cards.png") no-repeat;
+  background: url("/static/cards.png") no-repeat;
 }
