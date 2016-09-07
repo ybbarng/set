@@ -10,7 +10,6 @@ var peerPointView = 0;
 
 function init() {
   var socket = io();
-  var opts = {peerOpts: {trickle: false}, autoUpgrade: false};
 
   // Elements
   var privateButton = $('#private');
