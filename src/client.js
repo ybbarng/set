@@ -21,6 +21,7 @@ function init() {
   var interactions = $('#interactions');
   var reset = $('#reset');
   var draw = $('#draw');
+  var rename = $('#rename');
   var scoreboard = $('#scoreboard');
   var board = $('#board');
   var myPointView = $('#myPoint');
@@ -152,6 +153,15 @@ function init() {
 
   draw.on('click', function() {
     socket.emit('draw', null);
+  });
+
+  rename.on('click', function() {
+    var newId = prompt('새 이름을 입력해주세요', myId);
+    if (newId != null) {
+      myId = newId;
+      Cookies.set('myId', myId);
+      socket.emit('rename', newId);
+    }
   });
 
   $(document).on('click', function() {

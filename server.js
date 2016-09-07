@@ -79,4 +79,10 @@ io.on('connection', function(socket) {
       io.sockets.emit('table', game.table);
     }
   });
+
+  socket.on('rename', function(newId) {
+    game.rename(socket.peerId, newId);
+    socket.peerId = newId;
+    io.sockets.emit('players', JSON.stringify(game.players));
+  });
 });

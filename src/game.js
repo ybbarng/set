@@ -122,5 +122,12 @@ exports.Game.prototype = {
     if (player in this.players) {
       this.players[player].connected -= 1;
     }
+  },
+  rename: function(oldName, newName) {
+    if (oldName in this.players) {
+      var player = this.players[oldName];
+      delete this.players[oldName];
+      this.players[newName] = player;
+    }
   }
 };
