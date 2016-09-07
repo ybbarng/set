@@ -29,7 +29,7 @@ function init() {
 
   socket.on('message', function(data) {
     var li = $('<li>');
-    li.text(data.textVal);
+    li.text(data.name + '|' + data.message);
     msgList.append(li);
   });
 

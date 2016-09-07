@@ -45,7 +45,10 @@ io.on('connection', function(socket) {
 
   socket.on('message', function(data) {
     console.log('Message from peer: %s', JSON.stringify(data));
-    socket.broadcast.emit('message', data);
+    socket.broadcast.emit('message', {
+      name: socket.peerId,
+      message: data.textVal
+    });
   });
 
   socket.on('select-card', function(cards) {
