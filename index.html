@@ -9,22 +9,22 @@
     <body>
         <h1>Play Set</h1>
         <div id="message"></div>
-        <button id="reset">Reset</button>
-        <button id="draw">Draw 3</button>
+        <button id="reset">게임 다시 시작</button>
+        <button id="draw">카드 3장 열기</button>
         <div id="scoreboard-wrapper">
-            <p id="scoreboard-head">Scoreboard</p>
+            <p id="scoreboard-head">점수</p>
             <div id="scoreboard"></div>
         </div>
         <div id="board"></div>
         <div id="interactions">
             <ul id="messages"></ul>
             <form action="#" id="msg-form">
-                <label>Enter message</label>
+                <label>메시지 입력</label>
                 <input type="text" name="lname" id="msg-box" size="40">
-                <input type="submit" value="Submit">
+                <input type="submit" value="전송">
             </form>
             <br />
-            <h2>Messages</h2>
+            <h2>메시지 목록</h2>
             <ul id="msg-list"></ul>
         </div>
         <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
