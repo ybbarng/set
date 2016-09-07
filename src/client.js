@@ -48,6 +48,16 @@ function init() {
     socket.emit('join', myId);
   });
 
+  socket.on('rename', function(newId) {
+    if (myId === newId) {
+      message.text('이미 존재하는 이름입니다.');
+      return;
+    }
+    console.log('renamed : ' + myId + ' -> ' + newId);
+    myId = newId;
+    Cookies.set('myId', myId);
+  });
+
   socket.on('table', function(table) {
     board.empty();
     for (var cardIndex of table) {
@@ -161,8 +171,6 @@ function init() {
   rename.on('click', function() {
     var newId = prompt('새 이름을 입력해주세요', myId);
     if (newId != null) {
-      myId = newId;
-      Cookies.set('myId', myId);
       socket.emit('rename', newId);
     }
   });

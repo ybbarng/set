@@ -81,8 +81,13 @@ io.on('connection', function(socket) {
   });
 
   socket.on('rename', function(newId) {
-    game.rename(socket.peerId, newId);
-    socket.peerId = newId;
-    io.sockets.emit('players', JSON.stringify(game.players));
+    var result = game.rename(socket.peerId, newId);
+    if (result) {
+      socket.peerId = newId;
+    }
+    socket.emit('rename', socket.peerId);
+    if (result) {
+      io.sockets.emit('players', JSON.stringify(game.players));
+    }
   });
 });

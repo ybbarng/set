@@ -124,10 +124,15 @@ exports.Game.prototype = {
     }
   },
   rename: function(oldName, newName) {
+    if (newName in this.players) {
+      return false;
+    }
     if (oldName in this.players) {
       var player = this.players[oldName];
       delete this.players[oldName];
       this.players[newName] = player;
+      return true;
     }
+    return false;
   }
 };
