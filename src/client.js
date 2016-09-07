@@ -67,14 +67,13 @@ function init() {
     var playerList = Object.keys(players);
     if (playerList.length > 1) {
       interactions.css('display', 'block');
+      playerList.sort(function(a, b) {
+        var pointOrder = players[b].score - players[a].score;
+        var nameOrder = (a < b) ? -1 : 1;
+        return pointOrder == 0 ? nameOrder : pointOrder;
+      });
     } else {
       interactions.css('display', 'none');
-    }
-
-    var myIndex = playerList.indexOf(myId);
-    if (myIndex !== -1) {
-      playerList.splice(myIndex, 1);
-      playerList.unshift(myId);
     }
 
     scoreboard.empty();
