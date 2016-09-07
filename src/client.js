@@ -80,6 +80,8 @@ function init() {
     for (var player of playerList) {
       var playerView = $('<div>');
       playerView.addClass('player-wrapper');
+      playerView.addClass(players[player].connected ?
+          'connected' : 'disconnected');
       var playerNameView = $('<div>');
       playerNameView.addClass('player-name');
       playerNameView.text((player === myId) ? 'Me' : player);
