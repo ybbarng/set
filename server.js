@@ -38,10 +38,6 @@ io.on('connection', function(socket) {
     }
   });
 
-  socket.on('eight', function(data) {
-    socket.broadcast.emit('eight', data);
-  });
-
   socket.on('message', function(data) {
     console.log('Message from peer: %s', JSON.stringify(data));
     socket.broadcast.emit('message', data);
