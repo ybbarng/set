@@ -143,6 +143,10 @@ function init() {
     socket.emit('draw', null);
   });
 
+  $(document).on('click', function() {
+    message.text('');
+  });
+
   function onClickCard() {
     var isChanged = false;
     if ($(this).hasClass('selected')) {
