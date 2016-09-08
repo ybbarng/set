@@ -27,6 +27,9 @@ io.on('connection', function(socket) {
     console.log(sockets.length);
     game.connect(socket.peerId);
     io.sockets.emit('players', JSON.stringify(game.players));
+    if (game.isOver()) {
+      socket.emit('game-over', null);
+    }
   });
 
   socket.on('request-table', function() {
