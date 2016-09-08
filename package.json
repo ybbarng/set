@@ -1,7 +1,7 @@
 {
   "name": "set",
   "version": "0.0.1",
-  "description": "P2P set game for 2 players",
+  "description": "Online SET game",
   "author": {
     "name": "Bang Yongbae",
     "email": "ybbarng@gmail.com"
