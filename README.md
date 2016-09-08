@@ -1,17 +1,27 @@
-# Online Game Set
+# Online Game SET
 
-## Install dependencies
-If you haven't done so already, `npm install` the dependencies.
+## Prerequisites
 
-## Run
-To start, run the following:
+### Install Dependencies
+```
+npm install
+```
 
+### Install Browserify
+To build the client
+```
+npm install --global browserfiy
+```
+
+## Build Client
 ```
 browserify src/client.js -o bundle.js
-node server.js
 ```
 
-(You will need `browserify` for this. If it isn't installed get it with `npm install --global browserfiy`)
+## Run Server
+```
+node server.js
+```
 
 ## Resources
 * Set the original boardgame : [SET | America's Favorite Card Games®](http://www.setgame.com/set) 
