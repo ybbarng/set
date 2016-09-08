@@ -37,8 +37,8 @@ function init() {
     myId = Cookies.get('myId');
     if (!myId) {
       myId = '/#' + socket.id;
-      Cookies.set('myId', myId);
     }
+    Cookies.set('myId', myId, {expires: 365});
     console.log(myId);
     socket.emit('join', myId);
     socket.emit('request-table', null);
@@ -55,7 +55,7 @@ function init() {
     }
     console.log('renamed : ' + myId + ' -> ' + newId);
     myId = newId;
-    Cookies.set('myId', myId);
+    Cookies.set('myId', myId, {expires: 365});
   });
 
   socket.on('table', function(table) {
