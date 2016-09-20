@@ -76,16 +76,21 @@ io.on('connection', function(socket) {
   });
 
   socket.on('reset', function() {
+    console.log('Reset the game');
     game.reset();
     io.sockets.emit('table', game.table);
     io.sockets.emit('reset', null);
   });
 
   socket.on('draw', function() {
+    console.log(socket.peerId + ' is trying to open more cards');
     if (game.set) {
+      console.log('There are one or more sets');
       socket.emit('set-is-exist', null);
     } else {
+      console.log('There is no set');
       game.draw(3);
+      console.log('3 cards are opened');
       io.sockets.emit('table', game.table);
     }
   });
@@ -93,6 +98,7 @@ io.on('connection', function(socket) {
   socket.on('rename', function(newId) {
     var result = game.rename(socket.peerId, newId);
     if (result) {
+      console.log('Rename: ' + socket.peerId + ' -> ' + newId);
       socket.peerId = newId;
     }
     socket.emit('rename', socket.peerId);
