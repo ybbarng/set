@@ -14,7 +14,9 @@
     "socket.io-client": "^1.4.8"
   },
   "browserify": {
-    "transform": ["browserify-shim"]
+    "transform": [
+      "browserify-shim"
+    ]
   },
   "browserify-shim": {
     "socket.io-client": "global:io",
