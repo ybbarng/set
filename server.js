@@ -3,6 +3,7 @@ var server = require('http').createServer(
   ecstatic({ root: __dirname, handleError: false })
 );
 var io = require('socket.io')(server);
+require('console-stamp')(console, 'yyyy-mm-dd HH:MM:ss.l');
 
 var Game = require('./src/game.js');
 
