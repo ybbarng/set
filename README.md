@@ -5,17 +5,21 @@
 ### Install Dependencies
 ```
 npm install
+or
+yarn install
 ```
 
-### Install Browserify
+### Install gulp
 To build the client
 ```
-npm install --global browserfiy
+npm install --global gulp
+or
+yarn global add gulp
 ```
 
 ## Build Client
 ```
-browserify src/client.js -o app/js/client.js
+gulp
 ```
 
 ## Run Server

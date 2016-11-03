@@ -7,8 +7,6 @@
     "email": "ybbarng@gmail.com"
   },
   "dependencies": {
-    "browserify": "^13.1.0",
-    "browserify-shim": "^3.8.12",
     "console-stamp": "^0.2.2",
     "ecstatic": "^2.1.0",
     "socket.io": "^1.4.8",
@@ -25,6 +23,9 @@
     "jquery": "global:$"
   },
   "devDependencies": {
-    "gulp": "^3.9.1"
+    "browserify": "^13.1.1",
+    "browserify-shim": "^3.8.12",
+    "gulp": "^3.9.1",
+    "vinyl-source-stream": "^1.1.0"
   }
 }
