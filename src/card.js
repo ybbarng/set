@@ -43,7 +43,7 @@ exports.Card.prototype = (function() {
       this.shading = Object.keys(Shading)[index[2] * 1];
       this.count = Object.keys(Count)[index[3] * 1] * 1;
     },
-    getView() {
+    getView: function() {
       var cardView = document.createElement('div');
       cardView.className += 'card';
       cardView.dataset.color = this.color;
