@@ -23,5 +23,8 @@
     "socket.io-client": "global:io",
     "js-cookie": "global:Cookies",
     "jquery": "global:$"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1"
   }
 }
