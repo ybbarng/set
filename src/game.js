@@ -1,5 +1,5 @@
 var Card = require('./card.js');
-var sets = require('../static/sets.json');
+var sets = require('../sets.json');
 
 
 exports.Game = function() {

@@ -1,6 +1,6 @@
 var ecstatic = require('ecstatic');
 var server = require('http').createServer(
-  ecstatic({ root: __dirname, handleError: false })
+  ecstatic({ root: __dirname + '/app', handleError: false })
 );
 var io = require('socket.io')(server);
 require('console-stamp')(console, 'yyyy-mm-dd HH:MM:ss.l');

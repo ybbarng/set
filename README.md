@@ -15,7 +15,7 @@ npm install --global browserfiy
 
 ## Build Client
 ```
-browserify src/client.js -o bundle.js
+browserify src/client.js -o app/js/client.js
 ```
 
 ## Run Server
