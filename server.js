@@ -8,6 +8,11 @@ require('console-stamp')(console, 'yyyy-mm-dd HH:MM:ss.l');
 var Game = require('./src/game.js');
 
 
+io.engine.ws = new (require('uws').Server)({
+  noServer: true,
+  perMessageDeflate: false
+});
+
 server.listen(1225, function() {
   console.log('Listening on 1225');
 });

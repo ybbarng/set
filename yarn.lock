@@ -2945,6 +2945,10 @@ util@~0.10.1, util@0.10.3:
   dependencies:
     inherits "2.0.1"
 
+uws:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/uws/-/uws-0.11.0.tgz#c5d1111027befc702c4955a40977b88c0cc67215"
+
 v8flags@^2.0.2:
   version "2.0.11"
   resolved "https://registry.yarnpkg.com/v8flags/-/v8flags-2.0.11.tgz#bca8f30f0d6d60612cc2c00641e6962d42ae6881"
