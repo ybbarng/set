@@ -1,11 +1,18 @@
-var ecstatic = require('ecstatic');
-var server = require('http').createServer(
-  ecstatic({ root: __dirname + '/app', handleError: false })
-);
-var io = require('socket.io')(server);
-require('console-stamp')(console, 'yyyy-mm-dd HH:MM:ss.l');
+var express = require('express');
+var compression = require('compression');
 
+var app = express();
+app.use(compression());
+app.use(express.static(__dirname + '/app'));
+
+var oneDay = 864000000;
+app.use('/static', express.static(__dirname + '/static', { maxAge: oneDay }));
+
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 var Game = require('./src/game.js');
+
+require('console-stamp')(console, 'yyyy-mm-dd HH:MM:ss.l');
 
 
 io.engine.ws = new (require('uws').Server)({
@@ -13,7 +20,8 @@ io.engine.ws = new (require('uws').Server)({
   perMessageDeflate: false
 });
 
-server.listen(1225, function() {
+http.listen(1225, function() {
+  console.log('Server is started.');
   console.log('Listening on 1225');
 });
 
@@ -22,6 +30,8 @@ var sockets = [];
 
 io.on('connection', function(socket) {
   console.log('A socket is trying to connect : %s', socket.id);
+  var connectionType = socket.client.conn.transport.constructor.name;
+  console.log('Connection Type: ' + connectionType);
   sockets.push(socket);
   console.log('A socket is connected : %s', socket.id);
   console.log(sockets.length);
@@ -61,6 +71,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('select-card', function(cards) {
+    console.log('Connection Type: ' + socket.client.conn.transport.constructor.name);
     console.log('%s selects cards : %s', socket.peerId, JSON.stringify(cards));
     var newCards = false;
     if (cards.length === 3) {

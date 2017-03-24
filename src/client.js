@@ -10,6 +10,7 @@ var myPoint = 0;
 var peerPointView = 0;
 
 function init() {
+  //var socket = io({transports: ['websocket'], upgrade: false});
   var socket = io();
 
   // Elements
