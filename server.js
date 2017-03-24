@@ -9,7 +9,12 @@ var oneDay = 864000000;
 app.use('/static', express.static(__dirname + '/static', { maxAge: oneDay }));
 
 var http = require('http').Server(app);
-var io = require('socket.io')(http);
+var io = require('socket.io')(http, {
+  'browser client minification': true,
+  'browser client etag': true,
+  'browser client gzip': true,
+  'browser client expires': true
+});
 var Game = require('./src/game.js');
 
 require('console-stamp')(console, 'yyyy-mm-dd HH:MM:ss.l');
