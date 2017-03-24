@@ -10,7 +10,7 @@ gulp.task('bundle-js', function() {
     .bundle()
     .pipe(source('client.js'))
     .pipe(buffer())
-    .pipe(babel())
+    .pipe(babel({presets: ['es2015']}))
     .pipe(uglify().on('error', function(e) {
       console.log(e);
     }))
