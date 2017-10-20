@@ -1,134 +1,171 @@
-var io = require('socket.io-client');
-var Cookies = require('js-cookie');
-var $ = require('jquery');
+import Card from './card';
 
-var Card = require('./card.js');
+// const io = require('socket.io-client');
+// const Cookies = require('js-cookie');
+// const $ = require('jquery');
 
 
-var myId = '';
-var myPoint = 0;
-var peerPointView = 0;
+let myId = '';
 
 function init() {
-  //var socket = io({transports: ['websocket'], upgrade: false});
-  var socket = io();
+  // const socket = io({transports: ['websocket'], upgrade: false});
+  const socket = io();
 
   // Elements
-  var privateButton = $('#private');
-  var form = $('#msg-form');
-  var box = $('#msg-box');
-  var msgList = $('#msg-list');
-  var message = $('#message');
-  var interactions = $('#interactions');
-  var reset = $('#reset');
-  var draw = $('#draw');
-  var rename = $('#rename');
-  var scoreboard = $('#scoreboard');
-  var board = $('#board');
-  var myPointView = $('#myPoint');
-  var peerPointView = $('#peerPoint');
+  const form = $('#msg-form');
+  const box = $('#msg-box');
+  const msgList = $('#msg-list');
+  const message = $('#message');
+  const interactions = $('#interactions');
+  const reset = $('#reset');
+  const draw = $('#draw');
+  const rename = $('#rename');
+  const scoreboard = $('#scoreboard');
+  const board = $('#board');
 
-  socket.on('message', function(data) {
-    var li = $('<li>');
-    li.text(data.name + '|' + data.message);
+  function clearSelect() {
+    const selectedCards = $('.card.selected');
+    if (selectedCards.length === 3) {
+      console.log('selected 3 cards');
+      selectedCards.each((index, value) => {
+        $(value).removeClass('selected');
+      });
+    }
+  }
+
+  function onClickCard(event) {
+    let isChanged = false;
+    if ($(event.currentTarget).hasClass('selected')) {
+      $(event.currentTarget).removeClass('selected');
+      isChanged = true;
+    } else {
+      const selectedCards = $('.card.selected');
+      if (selectedCards.length >= 3) {
+        return;
+      }
+      $(event.currentTarget).addClass('selected');
+      isChanged = true;
+    }
+    if (isChanged) {
+      const selectedIndexes = [];
+      $('.card.selected').each((index, value) => {
+        const data = $(value).data();
+        selectedIndexes.push(Card.cardDataToInt(
+          data.color,
+          data.shape,
+          data.shading,
+          data.count,
+        ));
+      });
+      socket.emit('select-card', selectedIndexes);
+    }
+  }
+
+  function getCardView(card) {
+    return $(`.card[data-color="${card.color}"][data-shape="${card.shape}"][data-shading="${card.shading}"][data-count="${card.count}"]`);
+  }
+
+  socket.on('message', (data) => {
+    const li = $('<li>');
+    li.text(`${data.name}|${data.message}`);
     msgList.append(li);
   });
 
-  socket.on('connect', function() {
+  socket.on('connect', () => {
     myId = Cookies.get('myId');
     if (!myId) {
-      myId = '/#' + socket.id;
+      myId = `/#${socket.id}`;
     }
-    Cookies.set('myId', myId, {expires: 365});
+    Cookies.set('myId', myId, { expires: 365 });
     console.log(myId);
     socket.emit('join', myId);
     socket.emit('request-table', null);
   });
 
-  socket.on('reset', function() {
+  socket.on('reset', () => {
     socket.emit('join', myId);
   });
 
-  socket.on('rename', function(newId) {
+  socket.on('rename', (newId) => {
     if (myId === newId) {
       message.text('이미 존재하는 이름입니다.');
       return;
     }
-    console.log('renamed : ' + myId + ' -> ' + newId);
+    console.log(`renamed : ${myId} -> ${newId}`);
     myId = newId;
-    Cookies.set('myId', myId, {expires: 365});
+    Cookies.set('myId', myId, { expires: 365 });
   });
 
-  socket.on('table', function(table) {
+  socket.on('table', (table) => {
     board.empty();
-    for (var cardIndex of table) {
-      var card = new Card.Card(cardIndex);
-      var cardView = $(card.getView());
+    table.forEach((cardIndex) => {
+      const card = new Card(cardIndex);
+      const cardView = $(card.getView());
       cardView.click(onClickCard);
       board.append(cardView);
-    }
+    });
   });
 
-  socket.on('game-over', function() {
+  socket.on('game-over', () => {
     message.text('게임이 종료되었습니다.');
   });
 
-  socket.on('set-is-exist', function() {
+  socket.on('set-is-exist', () => {
     message.text('왜 찾질 못하니');
   });
 
-  socket.on('players', function(players) {
-    players = JSON.parse(players);
-    var playerList = Object.keys(players);
+  socket.on('players', (playersJson) => {
+    const players = JSON.parse(playersJson);
+    const playerList = Object.keys(players);
     if (playerList.length > 1) {
       interactions.css('display', 'block');
-      playerList.sort(function(a, b) {
-        var pointOrder = players[b].score - players[a].score;
-        var nameOrder = (a < b) ? -1 : 1;
-        return pointOrder == 0 ? nameOrder : pointOrder;
+      playerList.sort((a, b) => {
+        const pointOrder = players[b].score - players[a].score;
+        const nameOrder = (a < b) ? -1 : 1;
+        return pointOrder === 0 ? nameOrder : pointOrder;
       });
     } else {
       interactions.css('display', 'none');
     }
 
     scoreboard.empty();
-    for (var player of playerList) {
-      var playerView = $('<div>');
+    playerList.forEach((player) => {
+      const playerView = $('<div>');
       playerView.addClass('player-wrapper');
       playerView.addClass(players[player].connected ?
-          'connected' : 'disconnected');
-      var isMe = (player === myId);
+        'connected' : 'disconnected');
+      const isMe = (player === myId);
       if (isMe) {
         playerView.addClass('me');
       }
-      var playerNameView = $('<div>');
+      const playerNameView = $('<div>');
       playerNameView.addClass('player-name');
       playerNameView.text(player + (isMe ? ' (나)' : ''));
       playerView.append(playerNameView);
-      var playerScoreView = $('<span>');
+      const playerScoreView = $('<span>');
       playerScoreView.addClass('player-score');
       playerScoreView.text(players[player].score);
       playerView.append(playerScoreView);
       scoreboard.append(playerView);
-    }
+    });
   });
 
-  socket.on('select-card', function(data) {
+  socket.on('select-card', (data) => {
     if (data.user !== myId) {
-      $('.card.peer-selected').each(function() {
-        $(this).removeClass('peer-selected');
+      $('.card.peer-selected').each((index, value) => {
+        $(value).removeClass('peer-selected');
       });
-      for (var index of data.cards) {
-        var card = new Card.Card(index);
-        var cardView = getCardView(card);
+      data.cards.forEach((index) => {
+        const card = new Card(index);
+        const cardView = getCardView(card);
         cardView.addClass('peer-selected');
-      }
+      });
     }
     if (data.cards.length !== 3) {
       return;
     }
     if (data.user === myId && !data.newCards) {
-      setTimeout(function() {
+      setTimeout(() => {
         socket.emit('select-card', []);
       }, 150);
       clearSelect();
@@ -136,98 +173,53 @@ function init() {
     if (!data.newCards) {
       return;
     }
-    for (var i = 0; i < data.cards.length; i++) {
-      if (data.cards[i] !== data.newCards[i]) {
-        var cardView = getCardView(new Card.Card(data.cards[i]));
-        cardView.fadeOut('slow', (function(newCard) {
-          return function() {
-            if (newCard == -1) {
-              $(this).remove();
-            } else {
-              var newCardView = $(new Card.Card(newCard).getView())
-                .hide();
-              newCardView.click(onClickCard);
-              $(this).replaceWith(newCardView);
-              newCardView.fadeIn();
-            }
-          };
-        })(data.newCards[i]));
+    for (let i = 0; i < data.cards.length; i += 1) {
+      const oldCard = data.cards[i];
+      const newCard = data.newCards[i];
+      if (oldCard !== newCard) {
+        const cardView = getCardView(new Card(oldCard));
+        cardView.fadeOut('slow', () => {
+          if (newCard === -1) {
+            cardView.remove();
+          } else {
+            const newCardView = $(new Card(newCard).getView())
+              .hide();
+            newCardView.click(onClickCard);
+            cardView.replaceWith(newCardView);
+            newCardView.fadeIn();
+          }
+        });
       }
     }
   });
 
-  form.on('submit', function(e) {
+  form.on('submit', (e) => {
     e.preventDefault();
-    var li = $('<li>');
+    const li = $('<li>');
     li.text((box.val()));
     msgList.append(li);
-    socket.emit('message', {textVal: box.val()});
+    socket.emit('message', { textVal: box.val() });
     box.val('');
   });
 
-  reset.on('click', function() {
+  reset.on('click', () => {
     socket.emit('reset', null);
   });
 
-  draw.on('click', function() {
+  draw.on('click', () => {
     socket.emit('draw', null);
   });
 
-  rename.on('click', function() {
-    var newId = prompt('새 이름을 입력해주세요', myId);
-    if (newId != null) {
+  rename.on('click', () => {
+    const newId = prompt('새 이름을 입력해주세요', myId);
+    if (newId !== null) {
       socket.emit('rename', newId);
     }
   });
 
-  $(document).on('click', function() {
+  $(document).on('click', () => {
     message.text('');
   });
-
-  function onClickCard() {
-    var isChanged = false;
-    if ($(this).hasClass('selected')) {
-      $(this).removeClass('selected');
-      isChanged = true;
-    } else {
-      var selectedCards = $('.card.selected');
-      if (selectedCards.length >= 3) {
-        return;
-      }
-      $(this).addClass('selected');
-      isChanged = true;
-    }
-    if (isChanged) {
-      var selectedIndexes = [];
-      $('.card.selected').each(function() {
-        var data = $(this).data();
-        selectedIndexes.push(Card.cardToInt(
-              data.color,
-              data.shape,
-              data.shading,
-              data.count));
-      });
-      socket.emit('select-card', selectedIndexes);
-    }
-  }
-
-  function clearSelect() {
-    var selectedCards = $('.card.selected');
-    if (selectedCards.length == 3) {
-      console.log('selected 3 cards');
-      selectedCards.each(function() {
-        $(this).removeClass('selected');
-      });
-    }
-  }
-
-  function getCardView(card) {
-
-    return $('.card[data-color="' + card.color +
-      '"][data-shape="' + card.shape +
-      '"][data-shading="' + card.shading +
-      '"][data-count="' + card.count + '"]');
-  }
 }
 
 $(init);

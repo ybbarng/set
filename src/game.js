@@ -1,77 +1,80 @@
-var Card = require('./card.js');
-var sets = require('../sets.json');
+const Card = require('./card.js');
+const sets = require('../sets.json');
 
 
-exports.Game = function() {
-  this.initiate();
-};
+class Game {
+  constructor() {
+    this.initiate();
+  }
 
-exports.Game.prototype = {
-  initiate: function() {
+  initiate() {
     this.reset();
-  },
-  reset: function() {
+  }
+
+  reset() {
     this.players = {};
     this.table = [];
     this.set = false;
     this.deck = [];
-    for (var i = 0; i < 81; i++) {
+    for (let i = 0; i < 81; i += 1) {
       this.deck.push(i);
     }
     this.shuffle();
     this.draw(12);
-  },
-  shuffle: function() {
-    var m = this.deck.length, t, i;
-    while (m) {
-      i = Math.floor(Math.random() * m--);
-      t = this.deck[m];
-      this.deck[m] = this.deck[i];
-      this.deck[i] = t;
+  }
+
+  // Fisher-Yates Shuffle
+  shuffle() {
+    let i;
+    let j;
+    let buffer;
+    for (i = this.deck.length - 1; i > 0; i -= 1) {
+      j = Math.floor(Math.random() * (i + 1));
+      buffer = this.deck[j];
+      this.deck[j] = this.deck[i];
+      this.deck[i] = buffer;
     }
-  },
-  draw: function(count) {
-    for (var i = 0; i < count; i++) {
-      var card = this.deck.pop();
+  }
+
+  draw(count) {
+    for (let i = 0; i < count; i += 1) {
+      const card = this.deck.pop();
       if (typeof card === 'undefined') {
         break;
       }
       this.table.push(card);
     }
     this.updateSetExistence();
-  },
-  checkSet: function(player, cards) {
-    var colorSet = new Set();
-    var shapeSet = new Set();
-    var shadingSet = new Set();
-    var countSet = new Set();
-    for (var cardIndex of cards) {
-      var card = new Card.Card(cardIndex);
+  }
+
+  checkSet(player, cards) {
+    const colorSet = new Set();
+    const shapeSet = new Set();
+    const shadingSet = new Set();
+    const countSet = new Set();
+    cards.forEach((cardIndex) => {
+      const card = new Card.Card(cardIndex);
       colorSet.add(card.color);
       shapeSet.add(card.shape);
       shadingSet.add(card.shading);
       countSet.add(card.count);
-    }
-    var isSet = [1, 3].indexOf(colorSet.size) !== -1 &&
+    });
+    const isSet = [1, 3].indexOf(colorSet.size) !== -1 &&
         [1, 3].indexOf(shapeSet.size) !== -1 &&
         [1, 3].indexOf(shadingSet.size) !== -1 &&
         [1, 3].indexOf(countSet.size) !== -1;
     if (isSet) {
       if (!(player in this.players)) {
-        console.log('There is no such player %s in %s',
-            player, JSON.stringify(this.players));
-        return false;
+        throw new Error(`There is no such player ${player} in ${JSON.stringify(this.players)}`);
       }
       this.players[player].score += 3;
-      var newCards = [];
-      for (var cardIndex of cards) {
-        var tableIndex = this.table.indexOf(cardIndex);
+      const newCards = [];
+      cards.forEach((cardIndex) => {
+        const tableIndex = this.table.indexOf(cardIndex);
         if (tableIndex === -1) {
-          console.log('There is no such card %d in %s',
-              cardIndex, JSON.stringify(this.table));
-          return false;
+          throw new Error(`There is no such card ${cardIndex} in ${JSON.stringify(this.table)}`);
         }
-        var card = null;
+        let card = null;
         if (this.table.length <= 12) {
           card = this.deck.pop();
         }
@@ -82,19 +85,21 @@ exports.Game.prototype = {
           this.table.splice(tableIndex, 1);
           newCards.push(-1);
         }
-      }
+        return true;
+      });
       this.updateSetExistence();
       return newCards;
     }
     return false;
-  },
-  updateSetExistence: function() {
+  }
+
+  updateSetExistence() {
     this.set = false;
-    var table = this.table.slice().sort(function(a, b) { return a - b; });
-    for (var setIndex = 0; setIndex < sets.length; setIndex++) {
-      var set = [];
-      var cardIndex = 0;
-      for (var tableIndex = 0; tableIndex < table.length; tableIndex++) {
+    const table = this.table.slice().sort((a, b) => a - b);
+    for (let setIndex = 0; setIndex < sets.length; setIndex += 1) {
+      const set = [];
+      let cardIndex = 0;
+      for (let tableIndex = 0; tableIndex < table.length; tableIndex += 1) {
         if (table[tableIndex] === sets[setIndex][cardIndex]) {
           cardIndex += 1;
           set.push(this.table.indexOf(table[tableIndex]) + 1);
@@ -102,40 +107,46 @@ exports.Game.prototype = {
       }
       if (cardIndex === 3) {
         this.set = set;
-        console.log('set : ' + set.sort());
+        console.log(`set : ${set.sort()}`);
         return;
       }
     }
-    console.log('There is no set. : ' + table);
-  },
-  isOver: function() {
-    return !this.set && this.deck.length == 0;
-  },
-  connect: function(player) {
+    console.log(`There is no set. : ${table}`);
+  }
+
+  isOver() {
+    return !this.set && this.deck.length === 0;
+  }
+
+  connect(player) {
     if (player in this.players) {
       this.players[player].connected += 1;
     } else {
       this.players[player] = {
         connected: 1,
-        score: 0
+        score: 0,
       };
     }
-  },
-  disconnect: function(player) {
+  }
+
+  disconnect(player) {
     if (player in this.players) {
       this.players[player].connected -= 1;
     }
-  },
-  rename: function(oldName, newName) {
+  }
+
+  rename(oldName, newName) {
     if (newName in this.players) {
       return false;
     }
     if (oldName in this.players) {
-      var player = this.players[oldName];
+      const player = this.players[oldName];
       delete this.players[oldName];
       this.players[newName] = player;
       return true;
     }
     return false;
   }
-};
+}
+
+exports.Game = Game;
