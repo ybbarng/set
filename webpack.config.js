@@ -6,11 +6,11 @@ module.exports = {
     extensions: ['es6', '.js'],
   },
   entry: {
-    entry: './src/client.js',
+    client: './src/client.js',
   },
   output: {
     path: path.join(__dirname, 'app/js/'),
-    filename: 'client.js',
+    filename: '[name].js',
   },
   externals: {
     'socket.io-client': 'io',
