@@ -1,4 +1,5 @@
-const webpack = require('webpack');
+const path = require('path');
+const eslintFormatter = require('eslint-friendly-formatter');
 
 module.exports = {
   resolve: {
@@ -8,7 +9,7 @@ module.exports = {
     entry: './src/client.js',
   },
   output: {
-    path: __dirname + '/app/js/',
+    path: path.join(__dirname, 'app/js/'),
     filename: 'client.js',
   },
   externals: {
@@ -24,7 +25,7 @@ module.exports = {
         exclude: /node_modules/,
         loader: 'eslint-loader',
         options: {
-          formatter: require('eslint-friendly-formatter'),
+          formatter: eslintFormatter,
         },
       },
       {
@@ -43,7 +44,4 @@ module.exports = {
       },
     ],
   },
-  plugins: [
-    // new webpack.optimize.UglifyJsPlugin()
-  ],
 };
