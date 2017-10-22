@@ -11,7 +11,7 @@
     "console-stamp": "^0.2.2",
     "express": "^4.15.2",
     "socket.io": "^1.7.3",
-    "uws": "^0.11.0"
+    "uws": "^8.14.1"
   },
   "scripts": {
     "build:p": "webpack -p",

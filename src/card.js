@@ -3,7 +3,7 @@ const Shapes = ['OVAL', 'DIAMOND', 'SQUIGGLE'];
 const Shadings = ['SOLID', 'OPEN', 'STRIPED'];
 const Counts = [1, 2, 3];
 
-export default class {
+module.exports = class {
   constructor(index) {
     this.parseCard(index);
   }
@@ -50,4 +50,4 @@ export default class {
       (Shadings.indexOf(shading) * (3 ** 1)) +
       (Counts.indexOf(count) * (3 ** 0));
   }
-}
+};

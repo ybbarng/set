@@ -1,8 +1,7 @@
 const Card = require('./card.js');
 const sets = require('../sets.json');
 
-
-class Game {
+module.exports = class {
   constructor() {
     this.initiate();
   }
@@ -53,7 +52,7 @@ class Game {
     const shadingSet = new Set();
     const countSet = new Set();
     cards.forEach((cardIndex) => {
-      const card = new Card.Card(cardIndex);
+      const card = new Card(cardIndex);
       colorSet.add(card.color);
       shapeSet.add(card.shape);
       shadingSet.add(card.shading);
@@ -147,6 +146,4 @@ class Game {
     }
     return false;
   }
-}
-
-exports.Game = Game;
+};

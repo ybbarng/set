@@ -1,47 +1,49 @@
 const express = require('express');
+const path = require('path');
 const compression = require('compression');
+const uws = require('uws');
 
-var app = express();
+const app = express();
 app.use(compression());
-app.use(express.static(__dirname + '/app'));
+app.use(express.static(path.join(__dirname, 'app')));
 
-var oneDay = 864000000;
-app.use('/static', express.static(__dirname + '/static', { maxAge: oneDay }));
+const oneDay = 864000000;
+app.use('/static', express.static(path.join(__dirname, 'static'), { maxAge: oneDay }));
 
-var http = require('http').Server(app);
-var io = require('socket.io')(http, {
+const http = require('http').Server(app);
+const io = require('socket.io')(http, {
   'browser client minification': true,
   'browser client etag': true,
   'browser client gzip': true,
-  'browser client expires': true
+  'browser client expires': true,
 });
-var Game = require('./src/game.js');
+const Game = require('./src/game.js');
 
 require('console-stamp')(console, 'yyyy-mm-dd HH:MM:ss.l');
 
 
-io.engine.ws = new (require('uws').Server)({
+io.engine.ws = new (uws.Server)({
   noServer: true,
-  perMessageDeflate: false
+  perMessageDeflate: false,
 });
 
-http.listen(1225, function() {
+http.listen(1225, () => {
   console.log('Server is started.');
   console.log('Listening on 1225');
 });
 
-var game = new Game.Game();
-var sockets = [];
+const game = new Game();
+const sockets = [];
 
-io.on('connection', function(socket) {
+io.on('connection', (socket) => {
   console.log('A socket is trying to connect : %s', socket.id);
-  var connectionType = socket.client.conn.transport.constructor.name;
-  console.log('Connection Type: ' + connectionType);
+  const connectionType = socket.client.conn.transport.constructor.name;
+  console.log(`Connection Type: ${connectionType}`);
   sockets.push(socket);
   console.log('A socket is connected : %s', socket.id);
   console.log(sockets.length);
 
-  socket.on('join', function(peerId) {
+  socket.on('join', (peerId) => {
     console.log('A peer is trying to connect : %s', socket.peerId);
     socket.peerId = peerId;
     console.log('A peer is connected : %s', socket.peerId);
@@ -53,13 +55,13 @@ io.on('connection', function(socket) {
     }
   });
 
-  socket.on('request-table', function() {
+  socket.on('request-table', () => {
     socket.emit('table', game.table);
   });
 
-  socket.on('disconnect', function() {
+  socket.on('disconnect', () => {
     console.log('A socket is disconnected : %s %s', socket.id, socket.peerId);
-    var i = sockets.indexOf(socket);
+    const i = sockets.indexOf(socket);
     if (i !== -1) {
       sockets.splice(i, 1);
       game.disconnect(socket.peerId);
@@ -67,21 +69,21 @@ io.on('connection', function(socket) {
     }
   });
 
-  socket.on('message', function(data) {
-    console.log('Message from peer: %s', JSON.stringify(data));
+  socket.on('message', (data) => {
+    console.log(`Message from peer: ${JSON.stringify(data)}`);
     socket.broadcast.emit('message', {
       name: socket.peerId,
-      message: data.textVal
+      message: data.textVal,
     });
   });
 
-  socket.on('select-card', function(cards) {
-    console.log('Connection Type: ' + socket.client.conn.transport.constructor.name);
-    console.log('%s selects cards : %s', socket.peerId, JSON.stringify(cards));
-    var newCards = false;
+  socket.on('select-card', (cards) => {
+    console.log(`Connection Type: ${socket.client.conn.transport.constructor.name}`);
+    console.log(`${socket.peerId} selects cards : ${JSON.stringify(cards)}`);
+    let newCards = false;
     if (cards.length === 3) {
-      var newCards = game.checkSet(socket.peerId, cards);
-      console.log('Is set? ' + Boolean(newCards));
+      newCards = game.checkSet(socket.peerId, cards);
+      console.log(`Is set? ${Boolean(newCards)}`);
       if (newCards) {
         io.sockets.emit('players', JSON.stringify(game.players));
       }
@@ -91,20 +93,20 @@ io.on('connection', function(socket) {
     }
     io.sockets.emit('select-card', {
       user: socket.peerId,
-      cards: cards,
-      newCards: newCards
+      cards,
+      newCards,
     });
   });
 
-  socket.on('reset', function() {
+  socket.on('reset', () => {
     console.log('Reset the game');
     game.reset();
     io.sockets.emit('table', game.table);
     io.sockets.emit('reset', null);
   });
 
-  socket.on('draw', function() {
-    console.log(socket.peerId + ' is trying to open more cards');
+  socket.on('draw', () => {
+    console.log(`${socket.peerId} is trying to open more cards`);
     if (game.set) {
       console.log('There are one or more sets');
       socket.emit('set-is-exist', null);
@@ -116,10 +118,10 @@ io.on('connection', function(socket) {
     }
   });
 
-  socket.on('rename', function(newId) {
-    var result = game.rename(socket.peerId, newId);
+  socket.on('rename', (newId) => {
+    const result = game.rename(socket.peerId, newId);
     if (result) {
-      console.log('Rename: ' + socket.peerId + ' -> ' + newId);
+      console.log(`Rename: ${socket.peerId} -> ${newId}`);
       socket.peerId = newId;
     }
     socket.emit('rename', socket.peerId);
