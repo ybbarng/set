@@ -66,8 +66,8 @@ $(() => {
 
   const cookieMyId = 'myId';
   socket.on('connect', () => {
-    myId = Cookies.get(cookieMyId);
-    if (myId.startsWith('/#')) {
+    myId = Cookies.get(cookieMyId) || '';
+    if (myId && myId.startsWith('/#')) {
       Cookies.remove(cookieMyId);
       myId = '';
     }
