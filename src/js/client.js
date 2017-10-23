@@ -7,7 +7,7 @@ import Card from './card';
 
 let myId = '';
 
-function init() {
+$(() => {
   // const socket = io({transports: ['websocket'], upgrade: false});
   const socket = io();
 
@@ -220,6 +220,4 @@ function init() {
   $(document).on('click', () => {
     message.text('');
   });
-}
-
-$(init);
+});
