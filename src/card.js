@@ -2,7 +2,6 @@ const Colors = ['RED', 'BLUE', 'GREEN'];
 const Shapes = ['OVAL', 'DIAMOND', 'SQUIGGLE'];
 const Shadings = ['SOLID', 'OPEN', 'STRIPED'];
 const Counts = [1, 2, 3];
-const typesLength = [Colors, Shapes, Shadings, Counts].length;
 
 module.exports = class {
   constructor(index) {
@@ -62,38 +61,31 @@ module.exports = class {
     }
     return result;
   }
+
   static isSet(cardIndexes) {
-    const typeIndexes = [];
-    cardIndexes.forEach((cardIndex) => {
-      typeIndexes.push(this.getTypeIndexes(cardIndex));
-    });
-    for (let iType = 0; iType < typesLength; iType += 1) {
-      let typeSum = 0;
-      for (let iCard = 0; iCard < typeIndexes.length; iCard += 1) {
-        typeSum += typeIndexes[iCard][iType];
-      }
-      if (typeSum % 3 !== 0) {
-        return false;
+    return cardIndexes[2] === this.predictSetCard(cardIndexes[0], cardIndexes[1]);
+  }
+
+  static predictSetCard(cardIndex1, cardIndex2) {
+    const types1 = this.getTypeIndexes(cardIndex1);
+    const types2 = this.getTypeIndexes(cardIndex2);
+    let predictCard = 0;
+    for (let i = 0; i < 4; i += 1) {
+      predictCard *= 3;
+      if (types1[i] === types2[i]) {
+        predictCard += types1[i];
+      } else {
+        predictCard += 3 - (types1[i] + types2[i]);
       }
     }
-    return true;
+    return predictCard;
   }
 
   static getSets(table, findOneSet) {
     const sets = [];
     for (let i = 0; i < table.length; i += 1) {
       for (let j = i + 1; j < table.length; j += 1) {
-        const iTypes = this.getTypeIndexes(table[i]);
-        const jTypes = this.getTypeIndexes(table[j]);
-        let predictCard = 0;
-        for (let k = 0; k < 4; k += 1) {
-          predictCard *= 3;
-          if (iTypes[k] === jTypes[k]) {
-            predictCard += iTypes[k];
-          } else {
-            predictCard += 3 - (iTypes[k] + jTypes[k]);
-          }
-        }
+        const predictCard = this.predictSetCard(table[i], table[j]);
         for (let k = j + 1; k < table.length; k += 1) {
           if (table[k] === predictCard) {
             sets.push([i + 1, j + 1, k + 1]);
