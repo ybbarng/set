@@ -48,6 +48,8 @@ input, label {
 .player-wrapper {
   width: 150px;
   height: 15px;
+  line-height: 15px;
+  font-size: 8px;
   clear: both;
 }
 .player-wrapper.me {
@@ -63,21 +65,20 @@ input, label {
   content: "•";
 }
 .player-name {
-  width: 100px;
-  height: 15px;
-  font-size: 8px;
+  max-width: 100px;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-  line-height: 15px;
+  float:left;
+}
+.me-indicator {
+  margin-left: 5px;
   float:left;
 }
 .player-score {
   width: 25px;
-  height: 15px;
   font-size: 8px;
   text-align: right;
-  line-height: 15px;
   float:right;
 }
 #board {

@@ -139,8 +139,14 @@ $(() => {
       }
       const playerNameView = $('<div>');
       playerNameView.addClass('player-name');
-      playerNameView.text(player + (isMe ? ' (나)' : ''));
+      playerNameView.text(player);
       playerView.append(playerNameView);
+      if (isMe) {
+        const meIndicatorView = $('<div>');
+        meIndicatorView.addClass('me-indicator');
+        meIndicatorView.text('(나)');
+        playerView.append(meIndicatorView);
+      }
       const playerScoreView = $('<span>');
       playerScoreView.addClass('player-score');
       playerScoreView.text(players[player].score);
