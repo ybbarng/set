@@ -4,22 +4,13 @@
 
 ### Install Dependencies
 ```
-npm install
-or
 yarn install
-```
-
-### Install gulp
-To build the client
-```
-npm install --global gulp
-or
-yarn global add gulp
 ```
 
 ## Build Client
 ```
-gulp
+yarn build      # dev mode
+yarn build:p    # production mode
 ```
 
 ## Run Server
