@@ -1,5 +1,6 @@
 const path = require('path');
 const eslintFormatter = require('eslint-friendly-formatter');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   resolve: {
@@ -10,7 +11,7 @@ module.exports = {
   },
   output: {
     path: path.join(__dirname, 'app/js/'),
-    filename: '[name].js',
+    filename: '[name].[chunkhash].js',
   },
   externals: {
     'socket.io-client': 'io',
@@ -44,4 +45,10 @@ module.exports = {
       },
     ],
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/index.ejs',
+      filename: '../index.html',
+    }),
+  ],
 };
