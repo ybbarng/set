@@ -1,5 +1,6 @@
 const path = require('path');
 const eslintFormatter = require('eslint-friendly-formatter');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
@@ -50,5 +51,6 @@ module.exports = {
       template: './src/index.ejs',
       filename: '../index.html',
     }),
+    new CleanWebpackPlugin('./app/js'),
   ],
 };
