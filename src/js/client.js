@@ -13,7 +13,6 @@ $(() => {
   const interactions = $('#interactions');
   const reset = $('#reset');
   const draw = $('#draw');
-  const rename = $('#rename');
   const scoreboard = $('#scoreboard');
   const board = $('#board');
 
@@ -89,10 +88,11 @@ $(() => {
   socket.on('rename', (newId) => {
     if (myId === newId) {
       message.text('이미 존재하는 이름입니다.');
+      $('#scoreboard .me .player-name').text(myId);
       return;
     }
     myId = newId;
-    Cookies.set('myId', myId, { expires: 365 });
+    Cookies.set(cookieMyId, myId, { expires: 365 });
   });
 
   socket.on('table', (table) => {
@@ -142,6 +142,18 @@ $(() => {
       playerNameView.text(player);
       playerView.append(playerNameView);
       if (isMe) {
+        playerNameView.attr('contentEditable', true);
+        playerNameView.keypress((event) => {
+          if (event.which === 13) {
+            playerNameView.blur();
+          }
+        });
+        playerNameView.blur(() => {
+          const newId = playerNameView.text();
+          if (newId !== null && newId !== myId) {
+            socket.emit('rename', newId);
+          }
+        });
         const meIndicatorView = $('<div>');
         meIndicatorView.addClass('me-indicator');
         meIndicatorView.text('(나)');
@@ -213,13 +225,6 @@ $(() => {
 
   draw.on('click', () => {
     socket.emit('draw', null);
-  });
-
-  rename.on('click', () => {
-    const newId = prompt('새 이름을 입력해주세요', myId);
-    if (newId !== null) {
-      socket.emit('rename', newId);
-    }
   });
 
   $(document).on('click', () => {
