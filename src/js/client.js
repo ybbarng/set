@@ -1,14 +1,8 @@
 import Card from './card';
 
-// const io = require('socket.io-client');
-// const Cookies = require('js-cookie');
-// const $ = require('jquery');
-
-
 let myId = '';
 
 $(() => {
-  // const socket = io({transports: ['websocket'], upgrade: false});
   const socket = io();
 
   // Elements
@@ -26,7 +20,6 @@ $(() => {
   function clearSelect() {
     const selectedCards = $('.card.selected');
     if (selectedCards.length === 3) {
-      console.log('selected 3 cards');
       selectedCards.each((index, value) => {
         $(value).removeClass('selected');
       });
@@ -85,7 +78,6 @@ $(() => {
       myId = recommendId;
     }
     Cookies.set(cookieMyId, myId, { expires: 365 });
-    console.log(myId);
     socket.emit('join', myId);
     socket.emit('request-table', null);
   });
@@ -99,7 +91,6 @@ $(() => {
       message.text('이미 존재하는 이름입니다.');
       return;
     }
-    console.log(`renamed : ${myId} -> ${newId}`);
     myId = newId;
     Cookies.set('myId', myId, { expires: 365 });
   });
