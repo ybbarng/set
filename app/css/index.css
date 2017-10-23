@@ -83,6 +83,11 @@ input, label {
 #board {
   text-align: center;
 }
+#board::after {
+  content: "";
+  display: block;
+  clear: both;
+}
 #eight {
   width: 200px;
   height: 200px;
