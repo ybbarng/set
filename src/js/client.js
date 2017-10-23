@@ -71,12 +71,20 @@ $(() => {
     msgList.append(li);
   });
 
+  const cookieMyId = 'myId';
   socket.on('connect', () => {
-    myId = Cookies.get('myId');
-    if (!myId) {
-      myId = `/#${socket.id}`;
+    myId = Cookies.get(cookieMyId);
+    if (myId.startsWith('/#')) {
+      Cookies.remove(cookieMyId);
+      myId = '';
     }
-    Cookies.set('myId', myId, { expires: 365 });
+  });
+
+  socket.on('recommend-name', (recommendId) => {
+    if (myId === '') {
+      myId = recommendId;
+    }
+    Cookies.set(cookieMyId, myId, { expires: 365 });
     console.log(myId);
     socket.emit('join', myId);
     socket.emit('request-table', null);

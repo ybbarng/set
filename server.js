@@ -2,6 +2,8 @@ const express = require('express');
 const path = require('path');
 const compression = require('compression');
 const uws = require('uws');
+const Game = require('./src/js/game.js');
+const Animals = require('./animals.json');
 
 const app = express();
 app.use(compression());
@@ -17,7 +19,6 @@ const io = require('socket.io')(http, {
   'browser client gzip': true,
   'browser client expires': true,
 });
-const Game = require('./src/js/game.js');
 
 require('console-stamp')(console, 'yyyy-mm-dd HH:MM:ss.l');
 
@@ -35,20 +36,27 @@ http.listen(1225, () => {
 const game = new Game();
 const sockets = [];
 
+function getRandomName() {
+  return Animals[Math.floor(Math.random() * Animals.length)];
+}
+
 io.on('connection', (socket) => {
-  console.log('A socket is trying to connect : %s', socket.id);
+  let peerId = getRandomName();
+
+  console.log(`A socket is trying to connect : ${socket.id}`);
   const connectionType = socket.client.conn.transport.constructor.name;
   console.log(`Connection Type: ${connectionType}`);
   sockets.push(socket);
-  console.log('A socket is connected : %s', socket.id);
+  console.log(`A socket is connected : ${socket.id}`);
   console.log(sockets.length);
+  socket.emit('recommend-name', peerId);
 
-  socket.on('join', (peerId) => {
-    console.log('A peer is trying to connect : %s', socket.peerId);
-    socket.peerId = peerId;
-    console.log('A peer is connected : %s', socket.peerId);
+  socket.on('join', (selectedPeerId) => {
+    console.log(`A peer is trying to connect from socket ${socket.id}`);
+    peerId = selectedPeerId;
+    console.log(`A peer is connected with name: ${peerId}`);
     console.log(sockets.length);
-    game.connect(socket.peerId);
+    game.connect(peerId);
     io.sockets.emit('players', JSON.stringify(game.players));
     if (game.isOver()) {
       socket.emit('game-over', null);
@@ -60,11 +68,11 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    console.log('A socket is disconnected : %s %s', socket.id, socket.peerId);
+    console.log(`A socket is disconnected : ${socket.id} ${peerId}`);
     const i = sockets.indexOf(socket);
     if (i !== -1) {
       sockets.splice(i, 1);
-      game.disconnect(socket.peerId);
+      game.disconnect(peerId);
       io.sockets.emit('players', JSON.stringify(game.players));
     }
   });
@@ -72,17 +80,17 @@ io.on('connection', (socket) => {
   socket.on('message', (data) => {
     console.log(`Message from peer: ${JSON.stringify(data)}`);
     socket.broadcast.emit('message', {
-      name: socket.peerId,
+      name: peerId,
       message: data.textVal,
     });
   });
 
   socket.on('select-card', (cards) => {
     console.log(`Connection Type: ${socket.client.conn.transport.constructor.name}`);
-    console.log(`${socket.peerId} selects cards : ${JSON.stringify(cards)}`);
+    console.log(`${peerId} selects cards : ${JSON.stringify(cards)}`);
     let newCards = false;
     if (cards.length === 3) {
-      newCards = game.checkSet(socket.peerId, cards);
+      newCards = game.checkSet(peerId, cards);
       console.log(`Is set? ${Boolean(newCards)}`);
       if (newCards) {
         io.sockets.emit('players', JSON.stringify(game.players));
@@ -92,7 +100,7 @@ io.on('connection', (socket) => {
       }
     }
     io.sockets.emit('select-card', {
-      user: socket.peerId,
+      user: peerId,
       cards,
       newCards,
     });
@@ -106,7 +114,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('draw', () => {
-    console.log(`${socket.peerId} is trying to open more cards`);
+    console.log(`${peerId} is trying to open more cards`);
     if (game.sets.length > 0) {
       console.log('There are one or more sets');
       socket.emit('set-is-exist', null);
@@ -119,12 +127,12 @@ io.on('connection', (socket) => {
   });
 
   socket.on('rename', (newId) => {
-    const result = game.rename(socket.peerId, newId);
+    const result = game.rename(peerId, newId);
     if (result) {
-      console.log(`Rename: ${socket.peerId} -> ${newId}`);
-      socket.peerId = newId;
+      console.log(`Rename: ${peerId} -> ${newId}`);
+      peerId = newId;
     }
-    socket.emit('rename', socket.peerId);
+    socket.emit('rename', peerId);
     if (result) {
       io.sockets.emit('players', JSON.stringify(game.players));
     }
