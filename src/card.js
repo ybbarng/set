@@ -2,6 +2,7 @@ const Colors = ['RED', 'BLUE', 'GREEN'];
 const Shapes = ['OVAL', 'DIAMOND', 'SQUIGGLE'];
 const Shadings = ['SOLID', 'OPEN', 'STRIPED'];
 const Counts = [1, 2, 3];
+const typesLength = [Colors, Shapes, Shadings, Counts].length;
 
 module.exports = class {
   constructor(index) {
@@ -18,6 +19,7 @@ module.exports = class {
     this.shape = Shapes[indexStr[1] * 1];
     this.shading = Shadings[indexStr[2] * 1];
     this.count = Counts[indexStr[3] * 1] * 1;
+    this.index = index;
   }
 
   getView() {
@@ -49,5 +51,31 @@ module.exports = class {
       (Shapes.indexOf(shape) * (3 ** 2)) +
       (Shadings.indexOf(shading) * (3 ** 1)) +
       (Counts.indexOf(count) * (3 ** 0));
+  }
+
+  static getTypeIndexes(cardIndex) {
+    let remain = cardIndex;
+    const result = [];
+    for (let i = 0; i < 4; i += 1) {
+      result.unshift(remain % 3);
+      remain = Math.floor(remain / 3);
+    }
+    return result;
+  }
+  static isSet(cardIndexes) {
+    const typeIndexes = [];
+    cardIndexes.forEach((cardIndex) => {
+      typeIndexes.push(this.getTypeIndexes(cardIndex));
+    });
+    for (let iType = 0; iType < typesLength; iType += 1) {
+      let typeSum = 0;
+      for (let iCard = 0; iCard < typeIndexes.length; iCard += 1) {
+        typeSum += typeIndexes[iCard][iType];
+      }
+      if (typeSum % 3 !== 0) {
+        return false;
+      }
+    }
+    return true;
   }
 };

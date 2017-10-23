@@ -47,22 +47,7 @@ module.exports = class {
   }
 
   checkSet(player, cards) {
-    const colorSet = new Set();
-    const shapeSet = new Set();
-    const shadingSet = new Set();
-    const countSet = new Set();
-    cards.forEach((cardIndex) => {
-      const card = new Card(cardIndex);
-      colorSet.add(card.color);
-      shapeSet.add(card.shape);
-      shadingSet.add(card.shading);
-      countSet.add(card.count);
-    });
-    const isSet = [1, 3].indexOf(colorSet.size) !== -1 &&
-        [1, 3].indexOf(shapeSet.size) !== -1 &&
-        [1, 3].indexOf(shadingSet.size) !== -1 &&
-        [1, 3].indexOf(countSet.size) !== -1;
-    if (isSet) {
+    if (Card.isSet(cards)) {
       if (!(player in this.players)) {
         throw new Error(`There is no such player ${player} in ${JSON.stringify(this.players)}`);
       }
