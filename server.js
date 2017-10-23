@@ -17,7 +17,7 @@ const io = require('socket.io')(http, {
   'browser client gzip': true,
   'browser client expires': true,
 });
-const Game = require('./src/game.js');
+const Game = require('./src/js/game.js');
 
 require('console-stamp')(console, 'yyyy-mm-dd HH:MM:ss.l');
 

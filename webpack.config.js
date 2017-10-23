@@ -7,7 +7,7 @@ module.exports = {
     extensions: ['es6', '.js'],
   },
   entry: {
-    client: './src/client.js',
+    client: './src/js/client.js',
   },
   output: {
     path: path.join(__dirname, 'app/js/'),
