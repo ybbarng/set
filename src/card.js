@@ -78,4 +78,32 @@ module.exports = class {
     }
     return true;
   }
+
+  static getSets(table, findOneSet) {
+    const sets = [];
+    for (let i = 0; i < table.length; i += 1) {
+      for (let j = i + 1; j < table.length; j += 1) {
+        const iTypes = this.getTypeIndexes(table[i]);
+        const jTypes = this.getTypeIndexes(table[j]);
+        let predictCard = 0;
+        for (let k = 0; k < 4; k += 1) {
+          predictCard *= 3;
+          if (iTypes[k] === jTypes[k]) {
+            predictCard += iTypes[k];
+          } else {
+            predictCard += 3 - (iTypes[k] + jTypes[k]);
+          }
+        }
+        for (let k = j + 1; k < table.length; k += 1) {
+          if (table[k] === predictCard) {
+            sets.push([i + 1, j + 1, k + 1]);
+            if (findOneSet) {
+              return sets;
+            }
+          }
+        }
+      }
+    }
+    return sets;
+  }
 };

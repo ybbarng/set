@@ -1,5 +1,4 @@
 const Card = require('./card.js');
-const sets = require('../sets.json');
 
 module.exports = class {
   constructor() {
@@ -13,7 +12,7 @@ module.exports = class {
   reset() {
     this.players = {};
     this.table = [];
-    this.set = false;
+    this.sets = [];
     this.deck = [];
     for (let i = 0; i < 81; i += 1) {
       this.deck.push(i);
@@ -69,7 +68,6 @@ module.exports = class {
           this.table.splice(tableIndex, 1);
           newCards.push(-1);
         }
-        return true;
       });
       this.updateSetExistence();
       return newCards;
@@ -78,28 +76,16 @@ module.exports = class {
   }
 
   updateSetExistence() {
-    this.set = false;
-    const table = this.table.slice().sort((a, b) => a - b);
-    for (let setIndex = 0; setIndex < sets.length; setIndex += 1) {
-      const set = [];
-      let cardIndex = 0;
-      for (let tableIndex = 0; tableIndex < table.length; tableIndex += 1) {
-        if (table[tableIndex] === sets[setIndex][cardIndex]) {
-          cardIndex += 1;
-          set.push(this.table.indexOf(table[tableIndex]) + 1);
-        }
-      }
-      if (cardIndex === 3) {
-        this.set = set;
-        console.log(`set : ${set.sort()}`);
-        return;
-      }
+    this.sets = Card.getSets(this.table, true);
+    if (this.sets.length > 0) {
+      console.log(`set : ${this.sets}`);
+    } else {
+      console.log(`There is no set. : ${this.table}`);
     }
-    console.log(`There is no set. : ${table}`);
   }
 
   isOver() {
-    return !this.set && this.deck.length === 0;
+    return this.sets.length === 0 && this.deck.length === 0;
   }
 
   connect(player) {

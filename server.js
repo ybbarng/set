@@ -107,7 +107,7 @@ io.on('connection', (socket) => {
 
   socket.on('draw', () => {
     console.log(`${socket.peerId} is trying to open more cards`);
-    if (game.set) {
+    if (game.sets.length > 0) {
       console.log('There are one or more sets');
       socket.emit('set-is-exist', null);
     } else {
