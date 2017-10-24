@@ -92,6 +92,9 @@ io.on('connection', (socket) => {
   socket.on('select-card', (cards) => {
     console.log(`Connection Type: ${socket.client.conn.transport.constructor.name}`);
     console.log(`${peerId} selects cards : ${JSON.stringify(cards)}`);
+    if (game.isOver()) {
+      return;
+    }
     let newCards = false;
     if (cards.length === 3) {
       newCards = game.checkSet(peerId, cards);

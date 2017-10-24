@@ -35,6 +35,9 @@ module.exports = class {
   }
 
   draw(count) {
+    if (this.isOver()) {
+      return;
+    }
     for (let i = 0; i < count; i += 1) {
       const card = this.deck.pop();
       if (typeof card === 'undefined') {
@@ -46,6 +49,9 @@ module.exports = class {
   }
 
   checkSet(player, cards) {
+    if (this.isOver()) {
+      return false;
+    }
     if (Card.isSet(cards)) {
       if (!(player in this.players)) {
         throw new Error(`There is no such player ${player} in ${JSON.stringify(this.players)}`);
