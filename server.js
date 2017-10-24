@@ -123,11 +123,17 @@ io.on('connection', (socket) => {
     if (game.sets.length > 0) {
       console.log('There are one or more sets');
       socket.emit('set-is-exist', null);
+      game.deductPoint(peerId, 1);
+      io.sockets.emit('players', JSON.stringify(game.players));
     } else {
       console.log('There is no set');
-      game.draw(3);
-      console.log('3 cards are opened');
-      io.sockets.emit('table', game.table);
+      const result = game.draw(3);
+      if (result) {
+        console.log('3 cards are opened');
+        io.sockets.emit('table', game.table);
+      }
+      game.addPoint(peerId, 2);
+      io.sockets.emit('players', JSON.stringify(game.players));
     }
   });
 

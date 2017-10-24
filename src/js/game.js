@@ -36,7 +36,7 @@ module.exports = class {
 
   draw(count) {
     if (this.isOver()) {
-      return;
+      return false;
     }
     for (let i = 0; i < count; i += 1) {
       const card = this.deck.pop();
@@ -46,6 +46,7 @@ module.exports = class {
       this.table.push(card);
     }
     this.updateSetExistence();
+    return true;
   }
 
   checkSet(player, cards) {
