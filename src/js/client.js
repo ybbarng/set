@@ -13,6 +13,7 @@ $(() => {
   const interactions = $('#interactions');
   const reset = $('#reset');
   const deck = $('#deck');
+  const deckTopCard = $('#top-card');
   const scoreboard = $('#scoreboard');
   const board = $('#board');
 
@@ -96,8 +97,12 @@ $(() => {
   });
 
   function updateDeck(nCards) {
-    deck.html(`카드 더미 (${nCards}장)`);
-    deck.prop('disabled', nCards < 1);
+    deckTopCard.html(`(${nCards}장)`);
+    if (nCards > 0) {
+      deck.removeClass('disabled');
+    } else {
+      deck.addClass('disabled');
+    }
   }
 
   socket.on('table-context', (tableContext) => {

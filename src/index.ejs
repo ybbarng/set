@@ -10,8 +10,20 @@
     <body>
         <h1>보드게임 SET</h1>
         <div id="system-message"></div>
-        <button id="reset">게임 다시 시작</button>
-        <button id="deck">카드 더미 (0장)</button>
+        <div id="button-wrapper">
+            <button id="reset">게임 다시 시작</button>
+            <div id="deck">
+                <div class="card-small card-small-1">
+                </div>
+                <div class="card-small card-small-2">
+                </div>
+                <div class="card-small card-small-3">
+                </div>
+                <div class="card-small card-small-4" id="top-card">
+                    (0장)
+                </div>
+            </div>
+        </div>
         <div id="scoreboard-wrapper">
             <p id="scoreboard-head">점수</p>
             <div id="scoreboard"></div>
