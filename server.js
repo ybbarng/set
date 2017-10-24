@@ -68,7 +68,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('request-table', () => {
-    socket.emit('table', game.table);
+    socket.emit('table-context', game.getTableContext());
   });
 
   socket.on('disconnect', () => {
@@ -120,7 +120,7 @@ io.on('connection', (socket) => {
   socket.on('reset', () => {
     console.log('Reset the game');
     game.reset();
-    io.sockets.emit('table', game.table);
+    io.sockets.emit('table-context', game.getTableContext());
     io.sockets.emit('reset', null);
   });
 
@@ -136,7 +136,7 @@ io.on('connection', (socket) => {
       const result = game.draw(3);
       if (result) {
         console.log('3 cards are opened');
-        io.sockets.emit('table', game.table);
+        io.sockets.emit('table-context', game.getTableContext());
       }
       game.addPoint(peerId, 2);
       socket.emit('system-message', 'SET이 없었습니다! (+2점)');

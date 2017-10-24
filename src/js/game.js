@@ -133,4 +133,11 @@ module.exports = class {
   deductPoint(player, point) {
     this.addPoint(player, -point);
   }
+
+  getTableContext() {
+    return {
+      table: this.table,
+      deck: this.deck.length,
+    };
+  }
 };

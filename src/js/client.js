@@ -95,14 +95,15 @@ $(() => {
     Cookies.set(cookieMyId, myId, { expires: 365 });
   });
 
-  socket.on('table', (table) => {
+  socket.on('table-context', (tableContext) => {
     board.empty();
-    table.forEach((cardIndex) => {
+    tableContext.table.forEach((cardIndex) => {
       const card = new Card(cardIndex);
       const cardView = $(card.getView());
       cardView.click(onClickCard);
       board.append(cardView);
     });
+    draw.prop('disabled', tableContext.deck < 1);
   });
 
   socket.on('game-over', () => {
