@@ -98,7 +98,13 @@ io.on('connection', (socket) => {
     let newCards = false;
     if (cards.length === 3) {
       newCards = game.checkSet(peerId, cards);
-      console.log(`Is set? ${Boolean(newCards)}`);
+      const isSet = Boolean(newCards);
+      console.log(`Is set? ${isSet}`);
+      if (isSet) {
+        socket.emit('system-message', 'SET을 찾았습니다! (+3점)');
+      } else {
+        socket.emit('system-message', 'SET이 아닙니다. (-1점)');
+      }
       io.sockets.emit('players', JSON.stringify(game.players));
       if (game.isOver()) {
         io.sockets.emit('game-over', null);
@@ -122,8 +128,8 @@ io.on('connection', (socket) => {
     console.log(`${peerId} is trying to open more cards`);
     if (game.sets.length > 0) {
       console.log('There are one or more sets');
-      socket.emit('set-is-exist', null);
       game.deductPoint(peerId, 1);
+      socket.emit('system-message', 'SET이 존재합니다! (-1점)');
       io.sockets.emit('players', JSON.stringify(game.players));
     } else {
       console.log('There is no set');
@@ -133,6 +139,7 @@ io.on('connection', (socket) => {
         io.sockets.emit('table', game.table);
       }
       game.addPoint(peerId, 2);
+      socket.emit('system-message', 'SET이 없었습니다! (+2점)');
       io.sockets.emit('players', JSON.stringify(game.players));
     }
   });

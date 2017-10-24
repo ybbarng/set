@@ -9,7 +9,7 @@ $(() => {
   const form = $('#msg-form');
   const box = $('#msg-box');
   const msgList = $('#msg-list');
-  const message = $('#message');
+  const systemMessageView = $('#system-message');
   const interactions = $('#interactions');
   const reset = $('#reset');
   const draw = $('#draw');
@@ -87,7 +87,7 @@ $(() => {
 
   socket.on('rename', (newId) => {
     if (myId === newId) {
-      message.text('이미 존재하는 이름입니다.');
+      systemMessageView.text('이미 존재하는 이름입니다.');
     } else {
       myId = newId;
     }
@@ -106,11 +106,11 @@ $(() => {
   });
 
   socket.on('game-over', () => {
-    message.text('게임이 종료되었습니다.');
+    systemMessageView.text('게임이 종료되었습니다.');
   });
 
-  socket.on('set-is-exist', () => {
-    message.text('왜 찾질 못하니');
+  socket.on('system-message', (message) => {
+    systemMessageView.text(message);
   });
 
   socket.on('players', (playersJson) => {
@@ -228,6 +228,6 @@ $(() => {
   });
 
   $(document).on('click', () => {
-    message.text('');
+    systemMessageView.text('');
   });
 });

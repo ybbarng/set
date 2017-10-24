@@ -27,7 +27,7 @@ input, label {
   margin-top: 10px;
   display: block;
 }
-#message {
+#system-message {
   height: 21px;
 }
 #interactions {
