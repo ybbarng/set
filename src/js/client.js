@@ -88,10 +88,10 @@ $(() => {
   socket.on('rename', (newId) => {
     if (myId === newId) {
       message.text('이미 존재하는 이름입니다.');
-      $('#scoreboard .me .player-name').text(myId);
-      return;
+    } else {
+      myId = newId;
     }
-    myId = newId;
+    $('#scoreboard .me .player-name').text(myId);
     Cookies.set(cookieMyId, myId, { expires: 365 });
   });
 

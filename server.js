@@ -126,7 +126,11 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('rename', (newId) => {
+  socket.on('rename', (requestedNewId) => {
+    let newId = requestedNewId;
+    if (newId === '') {
+      newId = getRandomName();
+    }
     const result = game.rename(peerId, newId);
     if (result) {
       console.log(`Rename: ${peerId} -> ${newId}`);
