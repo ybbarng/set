@@ -13,6 +13,7 @@
     "socket.io": "^2.0.4",
     "uws": "^8.14.1"
   },
+  "license": "MIT",
   "scripts": {
     "build:p": "webpack -p",
     "build": "webpack"
