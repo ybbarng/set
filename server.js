@@ -114,6 +114,7 @@ io.on('connection', (socket) => {
       user: peerId,
       cards,
       newCards,
+      deck: game.deck.length,
     });
   });
 

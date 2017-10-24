@@ -12,7 +12,7 @@ $(() => {
   const systemMessageView = $('#system-message');
   const interactions = $('#interactions');
   const reset = $('#reset');
-  const draw = $('#draw');
+  const deck = $('#deck');
   const scoreboard = $('#scoreboard');
   const board = $('#board');
 
@@ -95,6 +95,11 @@ $(() => {
     Cookies.set(cookieMyId, myId, { expires: 365 });
   });
 
+  function updateDeck(nCards) {
+    deck.html(`카드 더미 (${nCards}장)`);
+    deck.prop('disabled', nCards < 1);
+  }
+
   socket.on('table-context', (tableContext) => {
     board.empty();
     tableContext.table.forEach((cardIndex) => {
@@ -103,7 +108,7 @@ $(() => {
       cardView.click(onClickCard);
       board.append(cardView);
     });
-    draw.prop('disabled', tableContext.deck < 1);
+    updateDeck(tableContext.deck);
   });
 
   socket.on('game-over', () => {
@@ -169,6 +174,7 @@ $(() => {
   });
 
   socket.on('select-card', (data) => {
+    updateDeck(data.deck);
     if (data.user !== myId) {
       $('.card.peer-selected').each((index, value) => {
         $(value).removeClass('peer-selected');
@@ -224,7 +230,7 @@ $(() => {
     socket.emit('reset', null);
   });
 
-  draw.on('click', () => {
+  deck.on('click', () => {
     socket.emit('draw', null);
   });
 
