@@ -209,3 +209,20 @@ input, label {
   top: 1px;
   left: 1px;
 }
+#message-input-wrapper::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+input {
+  display: inline-block;
+  float:left;
+}
+#msg-box {
+  height: 24px;
+  width: 340px;
+}
+#msg-submit {
+  height: 30px;
+  margin-left: 4px;
+}
