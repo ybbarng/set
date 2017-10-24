@@ -37,7 +37,11 @@ const game = new Game();
 const sockets = [];
 
 function getRandomName() {
-  return Animals[Math.floor(Math.random() * Animals.length)];
+  let name = '';
+  do {
+    name = Animals[Math.floor(Math.random() * Animals.length)];
+  } while (name in game.players);
+  return name;
 }
 
 io.on('connection', (socket) => {
