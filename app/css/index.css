@@ -1,3 +1,7 @@
+html {
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+}
 body {
   width:400px;
   margin:0 auto;
@@ -116,6 +120,8 @@ input, label {
   -moz-user-select: none;
   -o-user-select: none;
   user-select: none;
+
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 .card.selected {
   border: 1px solid rgb(0, 231, 202);
