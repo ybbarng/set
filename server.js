@@ -99,9 +99,7 @@ io.on('connection', (socket) => {
     if (cards.length === 3) {
       newCards = game.checkSet(peerId, cards);
       console.log(`Is set? ${Boolean(newCards)}`);
-      if (newCards) {
-        io.sockets.emit('players', JSON.stringify(game.players));
-      }
+      io.sockets.emit('players', JSON.stringify(game.players));
       if (game.isOver()) {
         io.sockets.emit('game-over', null);
       }

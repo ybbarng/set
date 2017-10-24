@@ -53,10 +53,7 @@ module.exports = class {
       return false;
     }
     if (Card.isSet(cards)) {
-      if (!(player in this.players)) {
-        throw new Error(`There is no such player ${player} in ${JSON.stringify(this.players)}`);
-      }
-      this.players[player].score += 3;
+      this.addPoint(player, 3);
       const newCards = [];
       cards.forEach((cardIndex) => {
         const tableIndex = this.table.indexOf(cardIndex);
@@ -78,6 +75,7 @@ module.exports = class {
       this.updateSetExistence();
       return newCards;
     }
+    this.deductPoint(player, 1);
     return false;
   }
 
@@ -122,5 +120,16 @@ module.exports = class {
       return true;
     }
     return false;
+  }
+
+  addPoint(player, point) {
+    if (!(player in this.players)) {
+      throw new Error(`There is no such player ${player} in ${JSON.stringify(this.players)}`);
+    }
+    this.players[player].score += point;
+  }
+
+  deductPoint(player, point) {
+    this.addPoint(player, -point);
   }
 };
