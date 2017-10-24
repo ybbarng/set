@@ -3,7 +3,7 @@ const path = require('path');
 const compression = require('compression');
 const uws = require('uws');
 const Game = require('./src/js/game.js');
-const Animals = require('./animals.json');
+const Animals = require('./data/animals.json');
 
 const app = express();
 app.use(compression());
