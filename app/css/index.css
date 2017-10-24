@@ -161,8 +161,26 @@ input, label {
   line-height: 35px;
   float: left;
   margin-left: 5px;
+  text-decoration: none;
+  color: black;
+  background-color: white;
 
-  -webkit-appearance: default-button;
+  border: 1px solid #008CBA;
+  border-radius: 4px;
+
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  -webkit-transition-duration: 0.1s; /* Safari */
+  transition-duration: 0.1s;
+}
+#reset:active {
+  background-color: #008CBA;
+}
+.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 #deck {
   height: 40px;
