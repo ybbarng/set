@@ -47,7 +47,10 @@ function getRandomName() {
 io.on('connection', (socket) => {
   let peerId = getRandomName();
 
-  console.log(`A socket is trying to connect. Socket Id: ${socket.id}, IP: ${socket.conn.remoteAddress}`);
+  const xRealIp = socket.handshake.headers['x-real-ip'];
+  const remoteAddress = socket.conn.remoteAddress;
+  console.log(`A socket is trying to connect. Socket Id: ${socket.id}`);
+  console.log(`X-Real-IP: ${xRealIp}, Remote Address: ${remoteAddress}`);
   const connectionType = socket.client.conn.transport.constructor.name;
   console.log(`Connection Type: ${connectionType}`);
   sockets.push(socket);
