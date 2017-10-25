@@ -47,7 +47,7 @@ function getRandomName() {
 io.on('connection', (socket) => {
   let peerId = getRandomName();
 
-  console.log(`A socket is trying to connect : ${socket.id}`);
+  console.log(`A socket is trying to connect. Socket Id: ${socket.id}, IP: ${socket.conn.remoteAddress}`);
   const connectionType = socket.client.conn.transport.constructor.name;
   console.log(`Connection Type: ${connectionType}`);
   sockets.push(socket);
