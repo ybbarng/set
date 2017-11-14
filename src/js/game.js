@@ -59,7 +59,8 @@ module.exports = class {
       cards.forEach((cardIndex) => {
         const tableIndex = this.table.indexOf(cardIndex);
         if (tableIndex === -1) {
-          throw new Error(`There is no such card ${cardIndex} in ${JSON.stringify(this.table)}`);
+          console.log(`There is no such card ${cardIndex} in ${JSON.stringify(this.table)}`);
+          return false;
         }
         let card = null;
         if (this.table.length <= 12) {
@@ -125,7 +126,8 @@ module.exports = class {
 
   addPoint(player, point) {
     if (!(player in this.players)) {
-      throw new Error(`There is no such player ${player} in ${JSON.stringify(this.players)}`);
+      console.log(`There is no such player ${player} in ${JSON.stringify(this.players)}`);
+      return;
     }
     this.players[player].score += point;
   }
