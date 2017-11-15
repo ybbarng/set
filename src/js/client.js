@@ -17,6 +17,8 @@ $(() => {
   const scoreboard = $('#scoreboard');
   const board = $('#board');
 
+  let oldPlayers = {};
+
   function clearSelect() {
     const selectedCards = $('.card.selected');
     if (selectedCards.length === 3) {
@@ -124,6 +126,11 @@ $(() => {
     systemMessageView.text(message);
   });
 
+  function animate($target, animationName, duration) {
+    $target.addClass(animationName);
+    window.setTimeout(() => $target.removeClass(animationName), duration);
+  }
+
   socket.on('players', (playersJson) => {
     const players = JSON.parse(playersJson);
     const playerList = Object.keys(players);
@@ -144,6 +151,10 @@ $(() => {
       playerView.addClass('player-wrapper');
       playerView.addClass(players[player].connected ?
         'connected' : 'disconnected');
+      if (oldPlayers && players[player] && oldPlayers[player] &&
+          players[player].score > oldPlayers[player].score) {
+        animate(playerView, 'emphasis', 500);
+      }
       const isMe = (player === myId);
       if (isMe) {
         playerView.addClass('me');
@@ -176,6 +187,7 @@ $(() => {
       playerView.append(playerScoreView);
       scoreboard.append(playerView);
     });
+    oldPlayers = players;
   });
 
   socket.on('select-card', (data) => {

@@ -1,6 +1,8 @@
-app/
+app/**/*
 !app/css
+!app/css/*
 !app/static
+!app/static/*
 
 # Created by https://www.gitignore.io/api/vim,node
 
