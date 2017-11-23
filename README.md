@@ -1,5 +1,7 @@
 # Online Game SET
 
+![SET preview](/preview.png)
+
 ## Prerequisites
 
 ### Install Dependencies
