@@ -18,12 +18,13 @@
         <link rel="shortcut icon" href="/static/favicon.ico" />
         <link rel="stylesheet" href="css/index.css?p=107">
         <link rel="stylesheet" href="css/animation.css">
+        <link rel="stylesheet" href="css/micromodal.css">
     </head>
     <body>
         <h1>보드게임 SET</h1>
         <div id="system-message"></div>
         <div id="button-wrapper">
-            <button id="reset">게임 다시 시작</button>
+            <button id="reset">새 게임 시작</button>
             <div id="deck">
                 <div class="card-small card-small-1">
                 </div>
@@ -53,6 +54,27 @@
             <br />
             <h2>메시지 목록</h2>
             <ul id="msg-list"></ul>
+        </div>
+        <div class="modal micromodal-slide" id="reset-modal" aria-hidden="true">
+            <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+                <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="reset-modal-title">
+                    <header class="modal__header">
+                        <h2 class="modal__title" id="reset-modal-title">
+                            새 게임 시작
+                        </h2>
+                        <button class="modal__close close-modal" aria-label="창 닫기"></button>
+                    </header>
+                    <div class="modal__content" id="reset-modal-content">
+                        <p>
+                            아직 게임이 진행중입니다. 정말로 현재 게임을 종료하고 새 게임을 시작하시겠습니까?
+                        </p>
+                    </div>
+                    <footer class="modal__footer">
+                        <button class="modal__btn" id="reset-confirm-button" aria-label="새 게임 시작">새 게임 시작</button>
+                        <button class="modal__btn modal__btn-primary close-modal" aria-label="창 닫기">창 닫기</button>
+                    </footer>
+                </div>
+            </div>
         </div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.3/js.cookie.min.js"></script>

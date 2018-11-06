@@ -1,3 +1,5 @@
+import MicroModal from 'micromodal';
+
 import Card from './card';
 
 let myId = '';
@@ -12,12 +14,16 @@ $(() => {
   const systemMessageView = $('#system-message');
   const interactions = $('#interactions');
   const reset = $('#reset');
+  const resetConfirmButton = $('#reset-confirm-button');
+  const closeModalButtons = $('.close-modal');
   const deck = $('#deck');
   const deckTopCard = $('#top-card');
   const scoreboard = $('#scoreboard');
   const board = $('#board');
+  MicroModal.init();
 
   let oldPlayers = {};
+  let isGameEnded = true;
 
   function clearSelect() {
     const selectedCards = $('.card.selected');
@@ -118,8 +124,12 @@ $(() => {
     updateDeck(tableContext.deck);
   });
 
-  socket.on('game-over', () => {
-    systemMessageView.text('게임이 종료되었습니다.');
+  socket.on('game-context', (gameContextJson) => {
+    const gameContext = JSON.parse(gameContextJson);
+    if (gameContext.isOver) {
+      systemMessageView.text('게임이 종료되었습니다.');
+    }
+    isGameEnded = gameContext.isOver;
   });
 
   socket.on('system-message', (message) => {
@@ -244,7 +254,20 @@ $(() => {
   });
 
   reset.on('click', () => {
+    if (isGameEnded) {
+      socket.emit('reset', null);
+    } else {
+      MicroModal.show('reset-modal', { disableFocus: true });
+    }
+  });
+
+  resetConfirmButton.on('click', () => {
+    MicroModal.close('reset-modal');
     socket.emit('reset', null);
+  });
+
+  closeModalButtons.on('click', () => {
+    MicroModal.close('reset-modal');
   });
 
   deck.on('click', () => {

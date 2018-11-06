@@ -65,9 +65,7 @@ io.on('connection', (socket) => {
     console.log(sockets.length);
     game.connect(peerId);
     io.sockets.emit('players', JSON.stringify(game.players));
-    if (game.isOver()) {
-      socket.emit('game-over', null);
-    }
+    socket.emit('game-context', JSON.stringify({'isOver': game.isOver()}));
   });
 
   socket.on('request-table', () => {
@@ -109,9 +107,7 @@ io.on('connection', (socket) => {
         socket.emit('system-message', 'SET이 아닙니다. (-1점)');
       }
       io.sockets.emit('players', JSON.stringify(game.players));
-      if (game.isOver()) {
-        io.sockets.emit('game-over', null);
-      }
+      io.sockets.emit('game-context', JSON.stringify({'isOver': game.isOver()}));
     }
     io.sockets.emit('select-card', {
       user: peerId,

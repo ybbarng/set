@@ -10,6 +10,7 @@
     "compression": "^1.6.2",
     "console-stamp": "^0.2.2",
     "express": "^4.15.2",
+    "micromodal": "^0.3.2",
     "socket.io": "^2.0.4",
     "uws": "^8.14.1"
   },
