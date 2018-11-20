@@ -44,6 +44,7 @@ input, label {
   top: 10px;
   right:10px;
   background: rgba(255, 204, 0, 0.3);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
 #scoreboard-head {
   margin: 3px 0 0 0;
@@ -107,19 +108,15 @@ input, label {
   font-size: 100px;
 }
 .card {
+  box-sizing: border-box;
   width: 120px;
   height: 75px;
-	text-align: center;
   float: left;
   margin: 5px;
+  padding: 2px;
 
   border: 1px solid #666;
   border-radius: 10px;
-  -moz-border-radius: 10px;
-
-  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.15);
-  -moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.15);
-  -webkit-box-shadow: 2px 2px 3x rgba(0, 0, 0, 0.15);
 
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -128,26 +125,40 @@ input, label {
   user-select: none;
 
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transition: box-shadow 0.2s;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+.card:hover {
+  box-shadow: 0 6px 14px rgba(0,0,0,0.25), 0 4px 8px rgba(0,0,0,0.22);
 }
 .card.selected {
-  border: 1px solid rgb(0, 231, 202);
-  box-shadow: 2px 2px 3px rgba(0, 231, 202, 0.15);
-  -moz-box-shadow: 2px 2px 3px rgba(0, 231, 202, 0.15);
-  -webkit-box-shadow: 2px 2px 3x rgba(0, 231, 202, 0.15);
+  border: 3px solid #00ca10;
+  box-shadow: 0 10px 28px rgba(0,117,9,0.25), 0 6px 10px rgba(0,117,9,0.22);
+  padding: 0px;
 }
 .pattern-wrapper {
-  margin: 3px;
-  padding: 7px 0px 1px 0px;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
   border: 1px solid transparent;
   border-radius: 10px;
   -moz-border-radius: 10px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .card.peer-selected .pattern-wrapper {
-  border: 1px solid rgb(255, 0, 102);
+  border: 2px solid rgb(255, 0, 102);
 }
 .pattern {
   width: 33px;
-  height: 55px;
+  height: 52px;
   display: inline-block;
   background: url("/static/cards.png") no-repeat;
 }
@@ -174,6 +185,12 @@ input, label {
 
   -webkit-transition-duration: 0.1s; /* Safari */
   transition-duration: 0.1s;
+
+  transition: box-shadow 0.2s;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+#reset:hover {
+  box-shadow: 0 10px 28px rgba(0,0,0,0.25), 0 6px 10px rgba(0,0,0,0.22);
 }
 #reset:active {
   background-color: #008CBA;
