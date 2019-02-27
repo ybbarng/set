@@ -159,10 +159,9 @@ $(() => {
     playerList.forEach((player) => {
       const playerView = $('<div>');
       playerView.addClass('player-wrapper');
-      playerView.addClass(players[player].connected ?
-        'connected' : 'disconnected');
-      if (oldPlayers && players[player] && oldPlayers[player] &&
-          players[player].score > oldPlayers[player].score) {
+      playerView.addClass(players[player].connected ? 'connected' : 'disconnected');
+      if (oldPlayers && players[player] && oldPlayers[player]
+          && players[player].score > oldPlayers[player].score) {
         animate(playerView, 'emphasis', 500);
       }
       const isMe = (player === myId);

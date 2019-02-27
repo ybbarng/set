@@ -46,10 +46,10 @@ module.exports = class {
   }
 
   static cardDataToInt(color, shape, shading, count) {
-    return (Colors.indexOf(color) * (3 ** 3)) +
-      (Shapes.indexOf(shape) * (3 ** 2)) +
-      (Shadings.indexOf(shading) * (3 ** 1)) +
-      (Counts.indexOf(count) * (3 ** 0));
+    return (Colors.indexOf(color) * (3 ** 3))
+    + (Shapes.indexOf(shape) * (3 ** 2))
+    + (Shadings.indexOf(shading) * (3 ** 1))
+    + (Counts.indexOf(count) * (3 ** 0));
   }
 
   static getTypeIndexes(cardIndex) {

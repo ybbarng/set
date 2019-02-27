@@ -60,7 +60,7 @@ module.exports = class {
         const tableIndex = this.table.indexOf(cardIndex);
         if (tableIndex === -1) {
           console.log(`There is no such card ${cardIndex} in ${JSON.stringify(this.table)}`);
-          return false;
+          return;
         }
         let card = null;
         if (this.table.length <= 12) {

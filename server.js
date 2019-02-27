@@ -1,7 +1,6 @@
 const express = require('express');
 const path = require('path');
 const compression = require('compression');
-const uws = require('uws');
 const Game = require('./src/js/game.js');
 const Animals = require('./data/animals.json');
 
@@ -21,12 +20,6 @@ const io = require('socket.io')(http, {
 });
 
 require('console-stamp')(console, 'yyyy-mm-dd HH:MM:ss.l');
-
-
-io.engine.ws = new (uws.Server)({
-  noServer: true,
-  perMessageDeflate: false,
-});
 
 http.listen(1225, () => {
   console.log('Server is started.');
