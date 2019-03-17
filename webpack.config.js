@@ -51,6 +51,6 @@ module.exports = {
       template: './src/index.ejs',
       filename: '../index.html',
     }),
-    new CleanWebpackPlugin('./app/js'),
+    new CleanWebpackPlugin(),
   ],
 };
