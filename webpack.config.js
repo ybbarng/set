@@ -1,5 +1,5 @@
 const path = require('path');
-const eslintFormatter = require('eslint-friendly-formatter');
+const eslintFormatter = require('eslint-formatter-friendly');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
