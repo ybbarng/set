@@ -1,6 +1,7 @@
 # Online Game SET
-
-![SET preview](/preview.png)
+<p align="center">
+    <img src="/preview.png" title="SET Preview" style="center;" />
+</p>
 
 ## Prerequisites
 
