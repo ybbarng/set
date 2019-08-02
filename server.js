@@ -21,9 +21,10 @@ const io = require('socket.io')(http, {
 
 require('console-stamp')(console, 'yyyy-mm-dd HH:MM:ss.l');
 
-http.listen(1225, () => {
+const PORT = 80;
+http.listen(PORT, () => {
   console.log('Server is started.');
-  console.log('Listening on 1225');
+  console.log(`Listening on ${PORT}`);
 });
 
 const game = new Game();

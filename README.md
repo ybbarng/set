@@ -3,21 +3,33 @@
     <img src="/preview.png" title="SET Preview" style="center;" />
 </p>
 
-## Prerequisites
+## Run Server with Docker
+
+### Build Image
+```sh
+docker build -t set .
+```
+
+### Run a container
+```sh
+docker run -p 127.0.0.1:8080:80 -d set
+```
+
+## Run Server without Docker
 
 ### Install Dependencies
-```
-yarn install
-```
-
-## Build Client
-```
-yarn build      # dev mode
-yarn build:p    # production mode
+```sh
+npm install
 ```
 
-## Run Server
+### Build Client
+```sh
+npm run build      # dev mode
+npm run build:p    # production mode
 ```
+
+### Run Server
+```sh
 node server.js
 ```
 
