@@ -1,11 +1,12 @@
 {
   "name": "set",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Online SET game",
   "author": {
     "name": "Bang Yongbae",
     "email": "ybbarng@gmail.com"
   },
+  "main": "server.js",
   "dependencies": {
     "compression": "^1.7.4",
     "console-stamp": "^0.2.7",
@@ -15,6 +16,7 @@
   },
   "license": "MIT",
   "scripts": {
+    "start": "npm run build:p && node server.js",
     "build:p": "webpack --mode production",
     "build": "webpack --mode development"
   },
