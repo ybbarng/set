@@ -1,5 +1,7 @@
 import MicroModal from 'micromodal';
 
+import NoSleep from 'nosleep.js';
+
 import Card from './card';
 
 let myId = '';
@@ -21,6 +23,8 @@ $(() => {
   const scoreboard = $('#scoreboard');
   const board = $('#board');
   MicroModal.init();
+
+  const noSleep = new NoSleep();
 
   let oldPlayers = {};
   let isGameEnded = true;
@@ -275,5 +279,8 @@ $(() => {
 
   $(document).on('click', () => {
     systemMessageView.text('');
+    if (!noSleep.enabled) {
+      noSleep.enable();
+    }
   });
 });
