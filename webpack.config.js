@@ -1,4 +1,5 @@
 const path = require('path');
+const ESLintPlugin = require('eslint-webpack-plugin');
 const eslintFormatter = require('eslint-formatter-friendly');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -22,15 +23,6 @@ module.exports = {
   module: {
     rules: [
       {
-        enforce: 'pre',
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'eslint-loader',
-        options: {
-          formatter: eslintFormatter,
-        },
-      },
-      {
         test: /\.js$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
@@ -47,6 +39,9 @@ module.exports = {
     ],
   },
   plugins: [
+    new ESLintPlugin({
+      formatter: eslintFormatter,
+    }),
     new HtmlWebpackPlugin({
       template: './src/index.ejs',
       filename: '../index.html',
